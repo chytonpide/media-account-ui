@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Modal, Button } from "react-bootstrap";
-import Select from "./Select";
+import FilteredSelect from "./FilteredSelect";
 import SearchBar from "./SearchBar";
 import mediasData from "../../screens/media/mediasData.json";
 
@@ -125,11 +125,11 @@ export default class SelectModal extends React.Component<
             onFilterTextChange={this.handleFilterTextChange}
           ></SearchBar>
           <p className="fs-7 lh-1 mb-4">媒体名、又は媒体のドメインで検索</p>
-          <Select
+          <FilteredSelect
             medias={this.state.medias}
             filterText={this.state.filterText}
             onSelectChange={this.handleSelectChange}
-          ></Select>
+          ></FilteredSelect>
           <div className="d-grid mt-3">
             <Button
               variant="secondary"
