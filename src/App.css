@@ -1,0 +1,27 @@
+html * {
+  font-family: "Noto Sans JP", sans-serif;
+}
+
+.form-label.required:after {
+  color: #d00;
+  content: "*";
+
+  margin-left: 8px;
+  top: 1px;
+}
+
+.bg-navy-dark {
+  background-color: #1a232d !important;
+}
+
+.bg-navy-dark.modal-header {
+  border-bottom: 1px solid #6c757d !important;
+}
+
+.bg-navy-dark.modal-footer {
+  border-top: 1px solid #6c757d !important;
+}
+
+.modal-content {
+  background-color: #1a232d !important;
+}

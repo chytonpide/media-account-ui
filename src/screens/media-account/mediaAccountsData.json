@@ -1,0 +1,22 @@
+{
+  "mediaAccounts": [
+    {
+      "id": 1,
+      "shopId": 1,
+      "mediaId": 1,
+      "username": "user1",
+      "password": "password1",
+      "optionalDescriptor": null,
+      "loginValidity": "VALID"
+    },
+    {
+      "id": 1,
+      "shopId": 1,
+      "mediaId": 2,
+      "username": "user2",
+      "password": "password2",
+      "optionalDescriptor": "optional1",
+      "loginValidity": "NOT_VALID"
+    }
+  ]
+}

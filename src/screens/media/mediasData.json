@@ -1,0 +1,54 @@
+{
+  "medias": [
+    {
+      "id": 1,
+      "name": "매체1",
+      "mediaCode": "lvg"
+    },
+    {
+      "id": 2,
+      "name": "매체2",
+      "mediaCode": "dj"
+    },
+    {
+      "id": 3,
+      "name": "매체3",
+      "mediaCode": "dj"
+    },
+    {
+      "id": 4,
+      "name": "매체4",
+      "mediaCode": "dj"
+    },
+    {
+      "id": 5,
+      "name": "매체5",
+      "mediaCode": "dj"
+    },
+    {
+      "id": 6,
+      "name": "매체6",
+      "mediaCode": "dj"
+    },
+    {
+      "id": 7,
+      "name": "매체7",
+      "mediaCode": "dj"
+    },
+    {
+      "id": 8,
+      "name": "매체8",
+      "mediaCode": "dj"
+    },
+    {
+      "id": 9,
+      "name": "매체9",
+      "mediaCode": "dj"
+    },
+    {
+      "id": 10,
+      "name": "매체10",
+      "mediaCode": "dj"
+    }
+  ]
+}
