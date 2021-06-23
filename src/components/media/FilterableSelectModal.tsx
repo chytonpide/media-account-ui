@@ -80,7 +80,10 @@ export default class SelectModal extends React.Component<
             filterText={this.state.filterText}
             onFilterTextChange={this.handleFilterTextChange}
           ></SearchBar>
-          <Select medias={this.state.medias}></Select>
+          <Select
+            medias={this.state.medias}
+            filterText={this.state.filterText}
+          ></Select>
           <div>Woohoo, you're reading this text in a modal!</div>
           <div className="d-grid mt-3">
             <Button
