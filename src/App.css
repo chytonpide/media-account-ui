@@ -25,3 +25,7 @@ html * {
 .modal-content {
   background-color: #1a232d !important;
 }
+
+.fs-7 {
+  font-size: 0.8em;
+}

@@ -9,6 +9,7 @@ export interface Media {
   name: string;
   url: string;
   keyword: string;
+  selected: boolean;
 }
 
 interface FilterbleSelectModalProps {
@@ -35,21 +36,64 @@ export default class SelectModal extends React.Component<
     };
 
     this.handleFilterTextChange = this.handleFilterTextChange.bind(this);
+    this.handleSelectChange = this.handleSelectChange.bind(this);
   }
 
   handleFilterTextChange(filterText: string) {
-    this.setState({ filterText: filterText });
+    const medias: Media[] = [];
+
+    this.state.medias.forEach((media) => {
+      medias.push({
+        id: media.id,
+        name: media.name,
+        url: media.url,
+        keyword: media.keyword,
+        selected: false,
+      });
+    });
+
+    this.setState({ filterText: filterText, medias: medias });
+  }
+
+  handleSelectChange(mediaId: number) {
+    const medias: Media[] = [];
+
+    this.state.medias.forEach((media) => {
+      if (media.id === mediaId) {
+        media = {
+          id: media.id,
+          name: media.name,
+          url: media.url,
+          keyword: media.keyword,
+          selected: true,
+        };
+
+        medias.push(media);
+      } else {
+        media = {
+          id: media.id,
+          name: media.name,
+          url: media.url,
+          keyword: media.keyword,
+          selected: false,
+        };
+
+        medias.push(media);
+      }
+    });
+    this.setState({ medias: medias });
   }
 
   componentDidMount() {
     const medias: Media[] = [];
 
-    mediasData.medias.forEach((mediaData) => {
+    mediasData.medias.forEach((mediaData, index) => {
       medias.push({
         id: mediaData.id,
         name: mediaData.name,
-        url: "ab.com",
-        keyword: "keyword",
+        url: "ab.com" + index,
+        keyword: "keyword" + index,
+        selected: false,
       });
     });
 
@@ -80,11 +124,12 @@ export default class SelectModal extends React.Component<
             filterText={this.state.filterText}
             onFilterTextChange={this.handleFilterTextChange}
           ></SearchBar>
+          <p className="fs-7 lh-1 mb-4">媒体名、又は媒体のドメインで検索</p>
           <Select
             medias={this.state.medias}
             filterText={this.state.filterText}
+            onSelectChange={this.handleSelectChange}
           ></Select>
-          <div>Woohoo, you're reading this text in a modal!</div>
           <div className="d-grid mt-3">
             <Button
               variant="secondary"

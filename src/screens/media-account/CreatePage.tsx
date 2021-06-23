@@ -47,8 +47,8 @@ export default class CreatePage extends React.Component<
     this.handleChnageSaveButtonClick = this.handleChnageSaveButtonClick.bind(
       this
     );
-    this.handleSelectMedia = this.handleSelectMedia.bind(this);
-    this.handleCloseMediaSelect = this.handleCloseMediaSelect.bind(this);
+    this.handleMediaSelect = this.handleMediaSelect.bind(this);
+    this.handleMediaSelectClose = this.handleMediaSelectClose.bind(this);
   }
 
   handleUsernameChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -78,13 +78,13 @@ export default class CreatePage extends React.Component<
     });
   }
 
-  handleSelectMedia() {
+  handleMediaSelect() {
     this.setState({
       showMediaSelect: false,
     });
   }
 
-  handleCloseMediaSelect() {
+  handleMediaSelectClose() {
     this.setState({
       showMediaSelect: false,
     });
@@ -142,8 +142,8 @@ export default class CreatePage extends React.Component<
     return (
       <div className="container-fluid vh-100">
         <MediaSelect
-          onConfirmButtonClick={this.handleSelectMedia}
-          onCloseButtonClick={this.handleCloseMediaSelect}
+          onConfirmButtonClick={this.handleMediaSelect}
+          onCloseButtonClick={this.handleMediaSelectClose}
           show={this.state.showMediaSelect}
         ></MediaSelect>
         <div className="row mb-4">
