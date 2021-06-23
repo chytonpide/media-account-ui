@@ -3,52 +3,82 @@
     {
       "id": 1,
       "name": "매체1",
-      "mediaCode": "lvg"
+      "mediaCode": "lvg",
+      "adminUrl": "abc.com",
+      "url": "abc.com",
+      "keyword": "abc"
     },
     {
       "id": 2,
       "name": "매체2",
-      "mediaCode": "dj"
+      "mediaCode": "dj",
+      "adminUrl": "abc.com",
+      "url": "abc.com",
+      "keyword": "abc"
     },
     {
       "id": 3,
       "name": "매체3",
-      "mediaCode": "dj"
+      "mediaCode": "dj",
+      "adminUrl": "abc.com",
+      "url": "abc.com",
+      "keyword": "abc"
     },
     {
       "id": 4,
       "name": "매체4",
-      "mediaCode": "dj"
+      "mediaCode": "dj",
+      "adminUrl": "abc.com",
+      "url": "abc.com",
+      "keyword": "abc"
     },
     {
       "id": 5,
       "name": "매체5",
-      "mediaCode": "dj"
+      "mediaCode": "dj",
+      "adminUrl": "abc.com",
+      "url": "abc.com",
+      "keyword": "abc"
     },
     {
       "id": 6,
       "name": "매체6",
-      "mediaCode": "dj"
+      "mediaCode": "dj",
+      "adminUrl": "abc.com",
+      "url": "abc.com",
+      "keyword": "abc"
     },
     {
       "id": 7,
       "name": "매체7",
-      "mediaCode": "dj"
+      "mediaCode": "dj",
+      "adminUrl": "abc.com",
+      "url": "abc.com",
+      "keyword": "abc"
     },
     {
       "id": 8,
       "name": "매체8",
-      "mediaCode": "dj"
+      "mediaCode": "dj",
+      "adminUrl": "abc.com",
+      "url": "abc.com",
+      "keyword": "abc"
     },
     {
       "id": 9,
       "name": "매체9",
-      "mediaCode": "dj"
+      "mediaCode": "dj",
+      "adminUrl": "abc.com",
+      "url": "abc.com",
+      "keyword": "abc"
     },
     {
       "id": 10,
       "name": "매체10",
-      "mediaCode": "dj"
+      "mediaCode": "dj",
+      "adminUrl": "abc.com",
+      "url": "abc.com",
+      "keyword": "abc"
     }
   ]
 }

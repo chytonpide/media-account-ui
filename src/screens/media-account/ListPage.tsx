@@ -63,7 +63,7 @@ export default class ListPage extends Component<ListPageProps, MediaAccounts> {
 
   render() {
     return (
-      <div className="container-fluid">
+      <div className="container-fluid vh-100">
         <div className="row pt-3">
           <div className="col">
             <TopBar shopId={this.props.shopId}></TopBar>

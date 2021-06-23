@@ -26,6 +26,11 @@ html * {
   background-color: #1a232d !important;
 }
 
+.readonly {
+  background-color: #b9bcbf !important;
+  border: 1px solid #b9bcbf !important;
+}
+
 .fs-7 {
   font-size: 0.8em;
 }

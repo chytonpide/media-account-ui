@@ -56,12 +56,9 @@ export default class EditPage extends React.Component<
 
   componentDidMount() {
     let mediaName = "";
-    console.log(this.props.match.params.mediaAccountId);
-    console.log(this.props.match.params.shopId);
     mediasData.medias.forEach((mediaData) => {
       if (mediaAccountData.mediaId === mediaData.id) {
         mediaName = mediaData.name;
-        console.log(mediaName);
       }
     });
 
@@ -79,13 +76,13 @@ export default class EditPage extends React.Component<
 
   public render() {
     return (
-      <div className="container-fluid">
+      <div className="container-fluid vh-100">
         <div className="row mb-4">
           <div className="col">
             <label className="form-label">媒体名</label>
             <input
               type="text"
-              className="form-control"
+              className="form-control readonly"
               id="mediaName"
               value={this.state.mediaName}
               readOnly
@@ -100,6 +97,7 @@ export default class EditPage extends React.Component<
               type="text"
               className="form-control"
               id="username"
+              defaultValue=""
               value={this.state.username}
               onChange={this.handleUsernameChange}
             ></input>
@@ -113,6 +111,7 @@ export default class EditPage extends React.Component<
               type="text"
               className="form-control"
               id="password"
+              defaultValue=""
               value={this.state.password}
               onChange={this.handlePasswordChange}
             ></input>
@@ -126,6 +125,7 @@ export default class EditPage extends React.Component<
               type="text"
               className="form-control"
               id="optionalDescriptor"
+              defaultValue=""
               value={
                 this.state.optionalDescriptor !== null
                   ? this.state.optionalDescriptor

@@ -4,7 +4,8 @@ import mediaAccountData from "./mediaAccountData.json";
 import { MediaAccount } from "./ListPage";
 import { RouteComponentProps } from "react-router-dom";
 import { Link } from "react-router-dom";
-import MediaSelect from "../../components/media/FilterableSelectModal";
+import MediaSelect from "../media/FilterableSelectModal";
+import { Media } from "../media/FilterableSelectModal";
 
 interface CreatePageProps {
   shopId: string;
@@ -47,8 +48,12 @@ export default class CreatePage extends React.Component<
     this.handleChnageSaveButtonClick = this.handleChnageSaveButtonClick.bind(
       this
     );
-    this.handleMediaSelect = this.handleMediaSelect.bind(this);
-    this.handleMediaSelectClose = this.handleMediaSelectClose.bind(this);
+    this.handleMediaSelectConfirmClick = this.handleMediaSelectConfirmClick.bind(
+      this
+    );
+    this.handleMediaSelectCloseClick = this.handleMediaSelectCloseClick.bind(
+      this
+    );
   }
 
   handleUsernameChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -78,13 +83,23 @@ export default class CreatePage extends React.Component<
     });
   }
 
-  handleMediaSelect() {
+  handleMediaSelectConfirmClick(media: Media) {
     this.setState({
+      mediaAccount: {
+        id: this.state.mediaAccount.id,
+        shopId: this.state.mediaAccount.shopId,
+        mediaId: media.id,
+        mediaName: media.name,
+        username: this.state.mediaAccount.username,
+        password: this.state.mediaAccount.password,
+        optionalDescriptor: this.state.mediaAccount.optionalDescriptor,
+        loginValidity: "",
+      },
       showMediaSelect: false,
     });
   }
 
-  handleMediaSelectClose() {
+  handleMediaSelectCloseClick() {
     this.setState({
       showMediaSelect: false,
     });
@@ -94,6 +109,7 @@ export default class CreatePage extends React.Component<
     console.log("send!");
   }
 
+  /*
   componentDidMount() {
     let mediaName = "";
 
@@ -118,6 +134,7 @@ export default class CreatePage extends React.Component<
       mediaAccount: mediaAccount,
     });
   }
+  */
 
   public render() {
     const mediaOptions: any = [];
@@ -142,24 +159,29 @@ export default class CreatePage extends React.Component<
     return (
       <div className="container-fluid vh-100">
         <MediaSelect
-          onConfirmButtonClick={this.handleMediaSelect}
-          onCloseButtonClick={this.handleMediaSelectClose}
+          onConfirmButtonClick={this.handleMediaSelectConfirmClick}
+          onCloseButtonClick={this.handleMediaSelectCloseClick}
           show={this.state.showMediaSelect}
         ></MediaSelect>
         <div className="row mb-4">
           <div className="col">
             <div>
               <label className="form-label required">媒体名</label>
-            </div>
-            <div>
-              <span></span>
-              <button
-                type="button"
-                className="btn btn-secondary"
-                onClick={this.handleSelectMediaButtonClick}
-              >
-                媒体選択
-              </button>
+              <div className="input-group">
+                <input
+                  type="text"
+                  className="form-control readonly"
+                  value={this.state.mediaAccount.mediaName}
+                  readOnly
+                />
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  onClick={this.handleSelectMediaButtonClick}
+                >
+                  媒体選択
+                </button>
+              </div>
             </div>
           </div>
         </div>

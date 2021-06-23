@@ -1,7 +1,7 @@
 import * as React from "react";
 import "./FilteredSelect.css";
 import Option from "./Option";
-import { Media } from "./FilterableSelectModal";
+import { Media } from "../../screens/media/FilterableSelectModal";
 
 export interface SelectProps {
   medias: Media[];
