@@ -1,8 +1,12 @@
 import * as React from "react";
-import { MediaAccounts } from "../../screens/media-account/ListPage";
+import { MediaAccount } from "../../screens/media-account/ListPage";
 import TableRow from "./TableRow";
 
-export default class Table extends React.Component<MediaAccounts> {
+interface TableProps {
+  mediaAccounts: MediaAccount[];
+}
+
+export default class Table extends React.Component<TableProps> {
   public render() {
     return (
       <table className="table text-light">

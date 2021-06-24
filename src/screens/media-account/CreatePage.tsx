@@ -1,11 +1,10 @@
 import * as React from "react";
 import mediasData from "../media/mediasData.json";
-import mediaAccountData from "./mediaAccountData.json";
 import { MediaAccount } from "./ListPage";
 import { RouteComponentProps } from "react-router-dom";
 import { Link } from "react-router-dom";
-import MediaSelect from "../media/FilterableSelectModal";
-import { Media } from "../media/FilterableSelectModal";
+import MediaSelect from "../media/ModalFilterableSelect";
+import { Media } from "../media/ModalFilterableSelect";
 
 interface CreatePageProps {
   shopId: string;

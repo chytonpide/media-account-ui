@@ -50,13 +50,29 @@ export default class TableRow extends React.Component<MediaAccount> {
         <td>{this.props.mediaName}</td>
         <td>
           {this.props.username}
-          &nbsp;<span className="btn btn-sm btn-outline-light">コピー</span>
+          &nbsp;&nbsp;
+          <span
+            className="btn btn-sm btn-outline-light"
+            onClick={() => {
+              navigator.clipboard.writeText(this.props.username);
+            }}
+          >
+            コピー
+          </span>
         </td>
         <td>
           {this.props.password}
           {this.props.password !== null && (
             <>
-              &nbsp;<span className="btn btn-sm btn-outline-light">コピー</span>
+              &nbsp;&nbsp;
+              <span
+                className="btn btn-sm btn-outline-light"
+                onClick={() => {
+                  navigator.clipboard.writeText(this.props.password);
+                }}
+              >
+                コピー
+              </span>
             </>
           )}
         </td>
@@ -64,7 +80,19 @@ export default class TableRow extends React.Component<MediaAccount> {
           {this.props.optionalDescriptor}
           {this.props.optionalDescriptor !== null && (
             <>
-              &nbsp;<span className="btn btn-sm btn-outline-light">コピー</span>
+              &nbsp;&nbsp;
+              <span
+                className="btn btn-sm btn-outline-light"
+                onClick={() => {
+                  if (this.props.optionalDescriptor != null) {
+                    navigator.clipboard.writeText(
+                      this.props.optionalDescriptor
+                    );
+                  }
+                }}
+              >
+                コピー
+              </span>
             </>
           )}
         </td>
