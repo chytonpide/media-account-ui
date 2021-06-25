@@ -1,10 +1,12 @@
 import React, { Component } from "react";
-import mediasData from "../media/mediasData.json";
+//import mediasData from "../media/mediasData.json";
 //import mediaAccountsData from "./mediaAccountsData.json";
 import Table from "../../components/media-account/Table";
 import TopBar from "../../components/media-account/TobBar";
 import ModalSpinner from "../../components/common/ModalSpinner";
 import { ApiError } from "../common/ApiError";
+import { handleApiError } from "../common/HandleApiError";
+import { MediaDetailListData } from "../media/MediaDetailListData";
 
 interface ListPageProps {
   shopId: number;
@@ -49,100 +51,80 @@ export default class ListPage extends Component<ListPageProps, ListPageState> {
       mediaAccounts: [],
     };
 
-    this.fetchMediaAccounts = this.fetchMediaAccounts.bind(this);
+    this.fetchMediaAccountListData = this.fetchMediaAccountListData.bind(this);
+    this.fetchMediaDetailListData = this.fetchMediaDetailListData.bind(this);
   }
 
   componentDidMount() {
-    this.fetchMediaAccounts().then((mediaAccountListData) => {
-      const loadedMediaAccounts: MediaAccount[] = [];
+    Promise.all([
+      this.fetchMediaAccountListData(),
+      this.fetchMediaDetailListData(),
+    ])
+      .then(([mediaAccountListData, mediaDetailListData]) => {
+        const loadedMediaAccounts: MediaAccount[] = [];
 
-      console.log(mediaAccountListData);
+        mediaAccountListData.mediaAccounts.forEach(
+          (mediaAccountData, index) => {
+            let mediaName = "";
 
-      mediaAccountListData.mediaAccounts.forEach((mediaAccountData, index) => {
-        let mediaName = "";
+            mediaDetailListData.mediaDetails.forEach((mediaDetail) => {
+              if (mediaAccountData.mediaId === mediaDetail.id) {
+                mediaName = mediaDetail.name;
+              }
+            });
 
-        mediasData.medias.forEach((mediaData, index) => {
-          if (mediaAccountData.mediaId === mediaData.id) {
-            mediaName = mediaData.name;
+            loadedMediaAccounts.push({
+              id: mediaAccountData.id,
+              shopId: mediaAccountData.shopId,
+              mediaId: mediaAccountData.mediaId,
+              mediaName: mediaName,
+              username: mediaAccountData.username,
+              password: mediaAccountData.password,
+              optionalDescriptor: mediaAccountData.optionalDescriptor,
+              loginValidity: mediaAccountData.loginValidity,
+            });
           }
+        );
+
+        this.setState({
+          mediaAccounts: loadedMediaAccounts,
+          showLoading: false,
         });
-
-        loadedMediaAccounts.push({
-          id: mediaAccountData.id,
-          shopId: mediaAccountData.shopId,
-          mediaId: mediaAccountData.mediaId,
-          mediaName: mediaName,
-          username: mediaAccountData.username,
-          password: mediaAccountData.password,
-          optionalDescriptor: mediaAccountData.optionalDescriptor,
-          loginValidity: mediaAccountData.loginValidity,
-        });
+      })
+      .catch((error) => {
+        console.log(error);
       });
-
-      this.setState({
-        mediaAccounts: loadedMediaAccounts,
-      });
-    });
-
     /*
-    const loadedMediaAccounts: MediaAccount[] = [];
-
-    mediaAccountsData.mediaAccounts.forEach((mediaAccountData, index) => {
-      let mediaName = "";
-
-      mediasData.medias.forEach((mediaData, index) => {
-        if (mediaAccountData.mediaId === mediaData.id) {
-          mediaName = mediaData.name;
-        }
-      });
-
-      loadedMediaAccounts.push({
-        id: mediaAccountData.id,
-        shopId: mediaAccountData.shopId,
-        mediaId: mediaAccountData.mediaId,
-        mediaName: mediaName,
-        username: mediaAccountData.username,
-        password: mediaAccountData.password,
-        optionalDescriptor: mediaAccountData.optionalDescriptor,
-        loginValidity: mediaAccountData.loginValidity,
-      });
-    });
-
-    this.setState({
-      mediaAccounts: loadedMediaAccounts,
-    });
-    */
-
     setTimeout(() => {
       this.setState({
         showLoading: false,
       });
     }, 2000);
+    */
   }
 
-  fetchMediaAccounts(): Promise<MediaAccountListData> {
+  fetchMediaAccountListData(): Promise<MediaAccountListData> {
     const url = "http://localhost:8082/shops/1/media-accounts";
     /*const url = "/shops/" + this.props.shopId + "/media-accounts"*/
 
-    return fetch(url).then((response) => {
-      if (response.ok) {
+    return fetch(url)
+      .then((response) => {
         return response.json() as Promise<MediaAccountListData>;
-      } else {
-        throw response;
-      }
-    });
+      })
+      .catch((error) => {
+        throw new Error("データーの読み込みに失敗しました。");
+      });
+  }
+  fetchMediaDetailListData(): Promise<MediaDetailListData> {
+    const url = "http://localhost:8082/media-details";
 
-    /*
-    let response = await fetch(
-      "/shops/" + this.props.shopId + "/media-accounts"
-    );
-
-    if (response.ok) {
-      const body: MediaAccountListData = await response.json();
-    } else {
-      const body: ApiError = await response.json();
-    }
-    */
+    return fetch(url)
+      .then((response) => {
+        return response.json() as Promise<MediaDetailListData>;
+      })
+      .catch((error) => {
+        throw new Error("データーの読み込みに失敗しました。");
+      });
   }
 
   render() {

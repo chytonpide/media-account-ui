@@ -15,11 +15,11 @@ html * {
 }
 
 .bg-navy-dark.modal-header {
-  border-bottom: 1px solid #6c757d !important;
+  border-bottom: 1px solid #4c454d !important;
 }
 
 .bg-navy-dark.modal-footer {
-  border-top: 1px solid #6c757d !important;
+  border-top: 1px solid #4c454d !important;
 }
 
 .modal-content {
