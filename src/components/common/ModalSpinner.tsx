@@ -16,7 +16,6 @@ export default class ModalSpinner extends React.Component<ModalSpinnerProps> {
   }
 
   public render() {
-    let style = "modal-spinner-container";
     if (this.props.show === false) {
       const el = this.modalElement.current;
       if (el != null) {
@@ -24,6 +23,12 @@ export default class ModalSpinner extends React.Component<ModalSpinnerProps> {
       }
     }
 
+    if (this.props.show === true) {
+      const el = this.modalElement.current;
+      if (el != null) {
+        el.style.display = "block";
+      }
+    }
     /*
     if (this.props.show === false) {
       style = style + " not-showing";

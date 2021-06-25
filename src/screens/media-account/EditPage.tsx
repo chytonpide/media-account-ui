@@ -1,7 +1,8 @@
 import * as React from "react";
 import ModalSpinner from "../../components/common/ModalSpinner";
 import { MediaAccount } from "./ListPage";
-import { RouteComponentProps } from "react-router-dom";
+import { ApiError } from "../common/ApiError";
+import { RouteComponentProps, useHistory } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { MediaAccountData } from "./MediaAccountData";
 import { MediaDetailData } from "../media/MediaDetailData";
@@ -28,6 +29,7 @@ export default class EditPage extends React.Component<
 > {
   private shopId: string;
   private mediaAccountId: string;
+
   constructor(props: RouteComponentProps<EditPageProps>) {
     super(props);
 
@@ -88,6 +90,7 @@ export default class EditPage extends React.Component<
 
   handleChnageSaveButtonClick() {
     this.setState({ showLoading: true });
+
     const data: ChangeLoginAccountData = {
       username: this.state.mediaAccount.username,
       password: this.state.mediaAccount.password,
@@ -97,18 +100,18 @@ export default class EditPage extends React.Component<
     this.fetchChangeLoginAccountData(this.shopId, this.mediaAccountId, data)
       .then((response) => {
         if (response.ok) {
-          //move to list
-        } else if (response.status == 500 /* error message exist */) {
-          this.setState({ showLoading: false });
-
-          //hide loadingView
-          //print message
+          console.log("ok");
+          this.props.history.push("/shops/" + this.shopId + "/media-accounts");
+        } else {
+          (response.json() as Promise<ApiError>).then((apiError) => {
+            console.log(apiError.message);
+            this.setState({ showLoading: false });
+          });
         }
       })
       .catch((error) => {
         this.setState({ showLoading: false });
-        //hide loadingView
-        //pring "データーの保存に失敗しました。"
+        console.log("データーの保存に失敗しました。");
       });
   }
 
@@ -182,7 +185,7 @@ export default class EditPage extends React.Component<
     data: ChangeLoginAccountData
   ): Promise<Response> {
     const url =
-      "/shops/" +
+      "http://localhost:8082/shops/" +
       shopId +
       "/media-accounts/" +
       mediaAccountId +
@@ -190,6 +193,7 @@ export default class EditPage extends React.Component<
 
     return fetch(url, {
       method: "PUT",
+      mode: "cors",
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
