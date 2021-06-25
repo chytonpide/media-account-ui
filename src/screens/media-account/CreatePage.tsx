@@ -31,6 +31,7 @@ export default class CreatePage extends React.Component<
         mediaName: "",
         username: "",
         password: "",
+        adminUrl: "",
         optionalDescriptor: "",
         loginValidity: "",
       },
@@ -92,7 +93,8 @@ export default class CreatePage extends React.Component<
         username: this.state.mediaAccount.username,
         password: this.state.mediaAccount.password,
         optionalDescriptor: this.state.mediaAccount.optionalDescriptor,
-        loginValidity: "",
+        adminUrl: this.state.mediaAccount.adminUrl,
+        loginValidity: this.state.mediaAccount.loginValidity,
       },
       showMediaSelect: false,
     });

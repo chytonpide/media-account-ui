@@ -4,6 +4,7 @@ import TableRow from "./TableRow";
 
 interface TableProps {
   mediaAccounts: MediaAccount[];
+  onRowDeleteButtonClick: (mediaAccountId: number) => void;
 }
 
 export default class Table extends React.Component<TableProps> {
@@ -25,14 +26,8 @@ export default class Table extends React.Component<TableProps> {
             return (
               <TableRow
                 key={index}
-                shopId={mediaAccount.shopId}
-                id={mediaAccount.id}
-                mediaId={mediaAccount.mediaId}
-                mediaName={mediaAccount.mediaName}
-                username={mediaAccount.username}
-                password={mediaAccount.password}
-                optionalDescriptor={mediaAccount.optionalDescriptor}
-                loginValidity={mediaAccount.loginValidity}
+                mediaAccount={mediaAccount}
+                onDeleteButtonClick={this.props.onRowDeleteButtonClick}
               ></TableRow>
             );
           })}

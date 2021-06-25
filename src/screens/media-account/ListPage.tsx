@@ -7,6 +7,8 @@ import ModalSpinner from "../../components/common/ModalSpinner";
 import { ApiError } from "../common/ApiError";
 import { handleApiError } from "../common/HandleApiError";
 import { MediaDetailListData } from "../media/MediaDetailListData";
+import { MediaAccountData } from "./MediaAccountData";
+import { MediaAccountListData } from "./MediaAccountListData";
 
 interface ListPageProps {
   shopId: number;
@@ -17,20 +19,6 @@ interface ListPageState {
   showLoading: boolean;
 }
 
-interface MediaAccountData {
-  id: number;
-  shopId: number;
-  mediaId: number;
-  username: string;
-  password: string;
-  optionalDescriptor: string | null;
-  loginValidity: string;
-}
-
-interface MediaAccountListData {
-  mediaAccounts: MediaAccountData[];
-}
-
 export interface MediaAccount {
   id: number;
   shopId: number;
@@ -39,6 +27,7 @@ export interface MediaAccount {
   username: string;
   password: string;
   optionalDescriptor: string | null;
+  adminUrl: string | null;
   loginValidity: string;
 }
 
@@ -53,6 +42,9 @@ export default class ListPage extends Component<ListPageProps, ListPageState> {
 
     this.fetchMediaAccountListData = this.fetchMediaAccountListData.bind(this);
     this.fetchMediaDetailListData = this.fetchMediaDetailListData.bind(this);
+    this.handleMediaAccountDeleteButtonClick = this.handleMediaAccountDeleteButtonClick.bind(
+      this
+    );
   }
 
   componentDidMount() {
@@ -66,10 +58,12 @@ export default class ListPage extends Component<ListPageProps, ListPageState> {
         mediaAccountListData.mediaAccounts.forEach(
           (mediaAccountData, index) => {
             let mediaName = "";
+            let mediaAdminUrl: string | null = "";
 
             mediaDetailListData.mediaDetails.forEach((mediaDetail) => {
               if (mediaAccountData.mediaId === mediaDetail.id) {
                 mediaName = mediaDetail.name;
+                mediaAdminUrl = mediaDetail.adminUrl;
               }
             });
 
@@ -81,6 +75,7 @@ export default class ListPage extends Component<ListPageProps, ListPageState> {
               username: mediaAccountData.username,
               password: mediaAccountData.password,
               optionalDescriptor: mediaAccountData.optionalDescriptor,
+              adminUrl: mediaAdminUrl,
               loginValidity: mediaAccountData.loginValidity,
             });
           }
@@ -94,13 +89,6 @@ export default class ListPage extends Component<ListPageProps, ListPageState> {
       .catch((error) => {
         console.log(error);
       });
-    /*
-    setTimeout(() => {
-      this.setState({
-        showLoading: false,
-      });
-    }, 2000);
-    */
   }
 
   fetchMediaAccountListData(): Promise<MediaAccountListData> {
@@ -115,6 +103,7 @@ export default class ListPage extends Component<ListPageProps, ListPageState> {
         throw new Error("データーの読み込みに失敗しました。");
       });
   }
+
   fetchMediaDetailListData(): Promise<MediaDetailListData> {
     const url = "http://localhost:8082/media-details";
 
@@ -125,6 +114,10 @@ export default class ListPage extends Component<ListPageProps, ListPageState> {
       .catch((error) => {
         throw new Error("データーの読み込みに失敗しました。");
       });
+  }
+
+  handleMediaAccountDeleteButtonClick(mediaAccountId: number) {
+    console.log(mediaAccountId);
   }
 
   render() {
@@ -139,7 +132,12 @@ export default class ListPage extends Component<ListPageProps, ListPageState> {
           </div>
           <div className="row pt-3">
             <div className="col">
-              <Table mediaAccounts={this.state.mediaAccounts}></Table>
+              <Table
+                mediaAccounts={this.state.mediaAccounts}
+                onRowDeleteButtonClick={
+                  this.handleMediaAccountDeleteButtonClick
+                }
+              ></Table>
             </div>
           </div>
         </div>

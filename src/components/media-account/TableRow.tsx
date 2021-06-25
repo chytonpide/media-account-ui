@@ -2,8 +2,13 @@ import * as React from "react";
 import { MediaAccount } from "../../screens/media-account/ListPage";
 import { Link } from "react-router-dom";
 
-export default class TableRow extends React.Component<MediaAccount> {
-  constructor(props: MediaAccount) {
+interface TableRowProps {
+  mediaAccount: MediaAccount;
+  onDeleteButtonClick: (mediaAccountId: number) => void;
+}
+
+export default class TableRow extends React.Component<TableRowProps> {
+  constructor(props: TableRowProps) {
     super(props);
 
     this.validityBadge = this.validityBadge.bind(this);
@@ -11,12 +16,18 @@ export default class TableRow extends React.Component<MediaAccount> {
     this.handleOpenAdminUrlButtonClick = this.handleOpenAdminUrlButtonClick.bind(
       this
     );
+    this.handleDeleteButtonClick = this.handleDeleteButtonClick.bind(this);
   }
 
-  handleEditClick(event: React.MouseEvent<HTMLElement>) {}
+  handleDeleteButtonClick(mediaAccountId: number) {
+    this.props.onDeleteButtonClick(mediaAccountId);
+  }
 
-  handleOpenAdminUrlButtonClick(adminUrl: string) {
-    window.open("https://www.google.com?" + adminUrl, "_system");
+  handleOpenAdminUrlButtonClick(adminUrl: string | null) {
+    if (adminUrl != null) {
+      console.log(adminUrl);
+      window.open(adminUrl);
+    }
   }
 
   private validityBadge(loginValidity: string) {
@@ -37,9 +48,9 @@ export default class TableRow extends React.Component<MediaAccount> {
   private eidtLink() {
     return (
       "/shops/" +
-      this.props.shopId +
+      this.props.mediaAccount.shopId +
       "/media-accounts/" +
-      this.props.id +
+      this.props.mediaAccount.id +
       "/edit"
     );
   }
@@ -47,28 +58,30 @@ export default class TableRow extends React.Component<MediaAccount> {
   public render() {
     return (
       <tr>
-        <td>{this.props.mediaName}</td>
+        <td>{this.props.mediaAccount.mediaName}</td>
         <td>
-          {this.props.username}
+          {this.props.mediaAccount.username}
           &nbsp;&nbsp;
           <span
             className="btn btn-sm btn-outline-light"
             onClick={() => {
-              navigator.clipboard.writeText(this.props.username);
+              navigator.clipboard.writeText(this.props.mediaAccount.username);
             }}
           >
             コピー
           </span>
         </td>
         <td>
-          {this.props.password}
-          {this.props.password !== null && (
+          {this.props.mediaAccount.password}
+          {this.props.mediaAccount.password !== null && (
             <>
               &nbsp;&nbsp;
               <span
                 className="btn btn-sm btn-outline-light"
                 onClick={() => {
-                  navigator.clipboard.writeText(this.props.password);
+                  navigator.clipboard.writeText(
+                    this.props.mediaAccount.password
+                  );
                 }}
               >
                 コピー
@@ -77,16 +90,16 @@ export default class TableRow extends React.Component<MediaAccount> {
           )}
         </td>
         <td>
-          {this.props.optionalDescriptor}
-          {this.props.optionalDescriptor !== null && (
+          {this.props.mediaAccount.optionalDescriptor}
+          {this.props.mediaAccount.optionalDescriptor !== null && (
             <>
               &nbsp;&nbsp;
               <span
                 className="btn btn-sm btn-outline-light"
                 onClick={() => {
-                  if (this.props.optionalDescriptor != null) {
+                  if (this.props.mediaAccount.optionalDescriptor != null) {
                     navigator.clipboard.writeText(
-                      this.props.optionalDescriptor
+                      this.props.mediaAccount.optionalDescriptor
                     );
                   }
                 }}
@@ -102,8 +115,11 @@ export default class TableRow extends React.Component<MediaAccount> {
               type="button"
               className="btn btn-sm btn-outline-light"
               onClick={() =>
-                this.handleOpenAdminUrlButtonClick(this.props.mediaName)
+                this.handleOpenAdminUrlButtonClick(
+                  this.props.mediaAccount.adminUrl
+                )
               }
+              disabled={this.props.mediaAccount.adminUrl != null ? false : true}
             >
               管理画面へ
             </button>
@@ -114,13 +130,19 @@ export default class TableRow extends React.Component<MediaAccount> {
             >
               編集
             </Link>
-            <button type="button" className="btn btn-sm btn-outline-light">
+            <button
+              type="button"
+              className="btn btn-sm btn-outline-light"
+              onClick={() => {
+                this.handleDeleteButtonClick(this.props.mediaAccount.id);
+              }}
+            >
               削除
             </button>
           </div>
         </td>
         <td>
-          <h5>{this.validityBadge(this.props.loginValidity)}</h5>
+          <h5>{this.validityBadge(this.props.mediaAccount.loginValidity)}</h5>
         </td>
       </tr>
     );
