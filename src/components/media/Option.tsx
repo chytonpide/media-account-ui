@@ -1,10 +1,11 @@
 import * as React from "react";
 
 export interface OptionProps {
-  itemName: string;
-  itemId: number;
+  mediaName: string;
+  mediaId: number;
   selected: boolean;
-  onClick: (selectedItemId: number) => void;
+  mediaAccountPresent: boolean;
+  onClick: (selectedMediaId: number) => void;
 }
 
 export default class Option extends React.Component<OptionProps> {
@@ -19,18 +20,28 @@ export default class Option extends React.Component<OptionProps> {
 
   public render() {
     let style = "list-group-item list-group-item-action";
+
+    if (this.props.mediaAccountPresent === true) {
+      style = style + "";
+    }
+
     if (this.props.selected === true) {
       style = style + " active";
     }
 
     return (
       <button
+        disabled={this.props.mediaAccountPresent === true ? true : false}
         type="button"
         className={style}
-        aria-current="true"
-        onClick={() => this.handleClick(this.props.itemId)}
+        onClick={() => this.handleClick(this.props.mediaId)}
       >
-        {this.props.itemName}
+        {this.props.mediaName}
+        {this.props.mediaAccountPresent === true && (
+          <>
+            &nbsp;&nbsp;<span className="badge bg-secondary">登録済</span>
+          </>
+        )}
       </button>
     );
   }

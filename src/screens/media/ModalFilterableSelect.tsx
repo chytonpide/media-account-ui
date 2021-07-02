@@ -2,7 +2,7 @@ import * as React from "react";
 import { Modal, Button } from "react-bootstrap";
 import FilteredSelect from "../../components/media/FilteredSelect";
 import SearchBar from "../../components/media/SearchBar";
-import mediasData from "./mediasData.json";
+import { fetchMediaListData } from "./MediaDataFetcher";
 
 export interface Media {
   id: number;
@@ -10,12 +10,14 @@ export interface Media {
   url: string;
   keyword: string;
   selected: boolean;
+  mediaAccountPresent: boolean;
 }
 
 interface ModalFilterbleSelectProps {
-  onConfirmButtonClick: (selectedMedia: Media) => void;
+  onSelectOkButtonClick: (selectedMedia: Media) => void;
   onCloseButtonClick: (event: void) => void;
   show: boolean;
+  shopId: number;
   //medias: Media[];
 }
 
@@ -30,13 +32,14 @@ export default class ModalFilterableSelect extends React.Component<
 > {
   constructor(props: ModalFilterbleSelectProps) {
     super(props);
+
     this.state = {
       medias: [],
       filterText: "",
     };
     this.handleFilterTextChange = this.handleFilterTextChange.bind(this);
     this.handleSelectChange = this.handleSelectChange.bind(this);
-    this.handleConfirmButtonClick = this.handleConfirmButtonClick.bind(this);
+    this.handleSelectOkButtonClick = this.handleSelectOkButtonClick.bind(this);
     this.handleCloseButtonClick = this.handleCloseButtonClick.bind(this);
   }
 
@@ -50,6 +53,7 @@ export default class ModalFilterableSelect extends React.Component<
         url: media.url,
         keyword: media.keyword,
         selected: false,
+        mediaAccountPresent: media.mediaAccountPresent,
       });
     });
 
@@ -67,6 +71,7 @@ export default class ModalFilterableSelect extends React.Component<
           url: media.url,
           keyword: media.keyword,
           selected: true,
+          mediaAccountPresent: media.mediaAccountPresent,
         };
 
         medias.push(media);
@@ -77,6 +82,7 @@ export default class ModalFilterableSelect extends React.Component<
           url: media.url,
           keyword: media.keyword,
           selected: false,
+          mediaAccountPresent: media.mediaAccountPresent,
         };
 
         medias.push(media);
@@ -85,13 +91,14 @@ export default class ModalFilterableSelect extends React.Component<
     this.setState({ medias: medias });
   }
 
-  handleConfirmButtonClick() {
+  handleSelectOkButtonClick() {
     let selectedMedia: Media = {
       id: 0,
       name: "none",
       url: "none",
       keyword: "none",
       selected: false,
+      mediaAccountPresent: false,
     };
 
     this.state.medias.forEach((media) => {
@@ -105,7 +112,7 @@ export default class ModalFilterableSelect extends React.Component<
       return;
     }
 
-    this.props.onConfirmButtonClick(selectedMedia);
+    this.props.onSelectOkButtonClick(selectedMedia);
   }
 
   handleCloseButtonClick() {
@@ -115,6 +122,7 @@ export default class ModalFilterableSelect extends React.Component<
   componentDidMount() {
     const medias: Media[] = [];
 
+    /*
     mediasData.medias.forEach((mediaData, index) => {
       medias.push({
         id: mediaData.id,
@@ -124,8 +132,26 @@ export default class ModalFilterableSelect extends React.Component<
         selected: false,
       });
     });
+    */
 
-    this.setState({ medias: medias });
+    fetchMediaListData(this.props.shopId).then((mediaListData) => {
+      mediaListData.medias.forEach((mediaData) => {
+        medias.push({
+          id: mediaData.mediaId,
+          name: mediaData.name,
+          url: mediaData.url,
+          keyword: mediaData.keyword,
+          selected: false,
+          mediaAccountPresent: mediaData.mediaAccountPresent,
+        });
+      });
+      this.setState({ medias: medias });
+    });
+    /*
+      .then(() => {
+        this.setState({ medias: medias });
+      });
+      */
   }
 
   public render() {
@@ -133,7 +159,6 @@ export default class ModalFilterableSelect extends React.Component<
       <Modal
         show={this.props.show}
         onHide={this.handleCloseButtonClick}
-        s
         backdrop="static"
         keyboard={false}
       >
@@ -152,14 +177,17 @@ export default class ModalFilterableSelect extends React.Component<
             filterText={this.state.filterText}
             onFilterTextChange={this.handleFilterTextChange}
           ></SearchBar>
-          <p className="fs-7 lh-1 mb-4">媒体名、又は媒体のドメインで検索</p>
+          <p className="fs-7 lh-1 mb-4">媒体名又はURLで検索</p>
           <FilteredSelect
             medias={this.state.medias}
             filterText={this.state.filterText}
             onSelectChange={this.handleSelectChange}
           ></FilteredSelect>
           <div className="d-grid mt-3">
-            <Button variant="secondary" onClick={this.handleConfirmButtonClick}>
+            <Button
+              variant="secondary"
+              onClick={this.handleSelectOkButtonClick}
+            >
               確定
             </Button>
           </div>

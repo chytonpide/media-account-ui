@@ -3,22 +3,16 @@ import "./FilteredSelect.css";
 import Option from "./Option";
 import { Media } from "../../screens/media/ModalFilterableSelect";
 
-export interface SelectProps {
+export interface FilteredSelectProps {
   medias: Media[];
   filterText: string;
   onSelectChange: (selectedItemId: number) => void;
 }
 
-export default class Select extends React.Component<SelectProps> {
+export default class FilteredSelect extends React.Component<
+  FilteredSelectProps
+> {
   public render() {
-    const media: Media = {
-      id: 1,
-      name: "a",
-      url: "a",
-      keyword: "a",
-      selected: false,
-    };
-
     const filterText = this.props.filterText;
 
     const options: React.ReactElement[] = [];
@@ -31,13 +25,13 @@ export default class Select extends React.Component<SelectProps> {
       ) {
         return;
       }
-
       options.push(
         <Option
           key={index}
-          itemName={media.name}
-          itemId={media.id}
+          mediaName={media.name}
+          mediaId={media.id}
           selected={media.selected}
+          mediaAccountPresent={media.mediaAccountPresent}
           onClick={this.props.onSelectChange}
         ></Option>
       );

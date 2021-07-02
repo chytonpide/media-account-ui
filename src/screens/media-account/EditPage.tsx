@@ -1,11 +1,14 @@
 import * as React from "react";
 import ModalSpinner from "../../components/common/ModalSpinner";
-import { MediaAccount } from "./ListPage";
+import { MediaAccount } from "./MediaAccount";
 import { ApiError } from "../common/ApiError";
 import { RouteComponentProps, useHistory } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { MediaAccountData } from "./MediaAccountData";
-import { MediaDetailData } from "../media/MediaDetailData";
+import { MediaData } from "../media/MediaData";
+import MessageBox from "../../components/common/MessageBox";
+import { fetchMediaAccountData } from "./MediaAccountDataFetcher";
+import { fetchMediaData } from "../media/MediaDataFetcher";
 
 interface EditPageProps {
   shopId: string;
@@ -14,6 +17,8 @@ interface EditPageProps {
 
 interface EditPageState {
   showLoading: boolean;
+  errorMessage: string | null;
+  errorMessageId: number | null;
   mediaAccount: MediaAccount;
 }
 
@@ -27,14 +32,16 @@ export default class EditPage extends React.Component<
   RouteComponentProps<EditPageProps>,
   EditPageState
 > {
-  private shopId: string;
-  private mediaAccountId: string;
+  private shopId: number;
+  private mediaAccountId: number;
 
   constructor(props: RouteComponentProps<EditPageProps>) {
     super(props);
 
     this.state = {
       showLoading: true,
+      errorMessage: null,
+      errorMessageId: null,
       mediaAccount: {
         id: 0,
         shopId: 0,
@@ -48,8 +55,8 @@ export default class EditPage extends React.Component<
       },
     };
 
-    this.shopId = this.props.match.params.shopId;
-    this.mediaAccountId = this.props.match.params.mediaAccountId;
+    this.shopId = Number(this.props.match.params.shopId);
+    this.mediaAccountId = Number(this.props.match.params.mediaAccountId);
 
     this.handleUsernameChange = this.handleUsernameChange.bind(this);
     this.handlePasswordChange = this.handlePasswordChange.bind(this);
@@ -60,9 +67,12 @@ export default class EditPage extends React.Component<
       this
     );
 
-    this.fetchMediaAccountData = this.fetchMediaAccountData.bind(this);
-    this.fetchMediaDetailData = this.fetchMediaDetailData.bind(this);
+    //this.fetchMediaAccountData = this.fetchMediaAccountData.bind(this);
+    //this.fetchMediaDetailData = this.fetchMediaDetailData.bind(this);
     this.fetchChangeLoginAccountData = this.fetchChangeLoginAccountData.bind(
+      this
+    );
+    this.hideLoadingAndrenderErrorMessageBox = this.hideLoadingAndrenderErrorMessageBox.bind(
       this
     );
   }
@@ -100,30 +110,35 @@ export default class EditPage extends React.Component<
     this.fetchChangeLoginAccountData(this.shopId, this.mediaAccountId, data)
       .then((response) => {
         if (response.ok) {
-          console.log("ok");
           this.props.history.push("/shops/" + this.shopId + "/media-accounts");
         } else {
           (response.json() as Promise<ApiError>).then((apiError) => {
-            console.log(apiError.message);
-            this.setState({ showLoading: false });
+            this.hideLoadingAndrenderErrorMessageBox(apiError.message);
           });
         }
       })
       .catch((error) => {
-        this.setState({ showLoading: false });
-        console.log("データーの保存に失敗しました。");
+        this.hideLoadingAndrenderErrorMessageBox(
+          "データーの保存に失敗しました。"
+        );
       });
   }
 
-  componentDidMount() {
-    //let mediaAccountData: MediaAccountData;
+  hideLoadingAndrenderErrorMessageBox(message: string) {
+    this.setState({
+      showLoading: false,
+      errorMessage: message,
+      errorMessageId: Math.round(new Date().getTime() / 1000),
+    });
+  }
 
-    this.fetchMediaAccountData(this.shopId, this.mediaAccountId)
+  componentDidMount() {
+    fetchMediaAccountData(this.shopId, this.mediaAccountId)
       .then((mediaAccountData) => {
         return mediaAccountData;
       })
       .then((mediaAccountData) => {
-        this.fetchMediaDetailData(mediaAccountData.mediaId + "").then(
+        fetchMediaData(this.shopId, mediaAccountData.mediaId).then(
           (mediaDetailData) => {
             this.setState({
               showLoading: false,
@@ -143,45 +158,15 @@ export default class EditPage extends React.Component<
         );
       })
       .catch((error) => {
-        console.log(error);
-      });
-  }
-
-  fetchMediaAccountData(
-    shopId: string,
-    mediaAccountId: string
-  ): Promise<MediaAccountData> {
-    const url =
-      "http://localhost:8082/shops/" +
-      shopId +
-      "/media-accounts/" +
-      mediaAccountId;
-    /*const url = "/shops/" + this.props.shopId + "/media-accounts"*/
-
-    return fetch(url)
-      .then((response) => {
-        return response.json() as Promise<MediaAccountData>;
-      })
-      .catch((error) => {
-        throw new Error("データーの読み込みに失敗しました。");
-      });
-  }
-
-  fetchMediaDetailData(mediaId: string): Promise<MediaDetailData> {
-    const url = "http://localhost:8082/media-details/" + mediaId;
-
-    return fetch(url)
-      .then((response) => {
-        return response.json() as Promise<MediaDetailData>;
-      })
-      .catch((error) => {
-        throw new Error("データーの読み込みに失敗しました。");
+        this.hideLoadingAndrenderErrorMessageBox(
+          "データーの読み込みに失敗しました。"
+        );
       });
   }
 
   fetchChangeLoginAccountData(
-    shopId: string,
-    mediaAccountId: string,
+    shopId: number,
+    mediaAccountId: number,
     data: ChangeLoginAccountData
   ): Promise<Response> {
     const url =
@@ -207,6 +192,18 @@ export default class EditPage extends React.Component<
       <>
         <ModalSpinner show={this.state.showLoading}></ModalSpinner>
         <div className="container-fluid vh-100">
+          <div className="row mb-2">
+            <div className="col">
+              {this.state.errorMessage != null &&
+                this.state.errorMessageId != null && (
+                  <MessageBox
+                    messageId={this.state.errorMessageId}
+                    message={this.state.errorMessage}
+                    color={"danger"}
+                  />
+                )}
+            </div>
+          </div>
           <div className="row mb-4">
             <div className="col">
               <label className="form-label">媒体名</label>
@@ -235,7 +232,7 @@ export default class EditPage extends React.Component<
 
           <div className="row mb-4">
             <div className="col">
-              <label className="form-label">PW</label>
+              <label className="form-label required">PW</label>
               <input
                 type="text"
                 className="form-control"

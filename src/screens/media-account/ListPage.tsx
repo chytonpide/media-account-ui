@@ -4,55 +4,61 @@ import React, { Component } from "react";
 import Table from "../../components/media-account/Table";
 import TopBar from "../../components/media-account/TobBar";
 import ModalSpinner from "../../components/common/ModalSpinner";
+import { RouteComponentProps } from "react-router-dom";
 import { ApiError } from "../common/ApiError";
 import { handleApiError } from "../common/HandleApiError";
-import { MediaDetailListData } from "../media/MediaDetailListData";
+import { MediaListData } from "../media/MediaListData";
 import { MediaAccountData } from "./MediaAccountData";
 import { MediaAccountListData } from "./MediaAccountListData";
+import { MediaAccount } from "./MediaAccount";
+import {
+  fetchMediaAccountListData,
+  fetchDeleteMediaAccount,
+} from "./MediaAccountDataFetcher";
+import { fetchMediaListData } from "../media/MediaDataFetcher";
+import ModalConfirm from "../../components/common/ModalConfirm";
 
 interface ListPageProps {
-  shopId: number;
+  shopId: string;
 }
 
 interface ListPageState {
   mediaAccounts: MediaAccount[];
   showLoading: boolean;
+  showDeleteConfirm: boolean;
 }
 
-export interface MediaAccount {
-  id: number;
-  shopId: number;
-  mediaId: number;
-  mediaName: string;
-  username: string;
-  password: string;
-  optionalDescriptor: string | null;
-  adminUrl: string | null;
-  loginValidity: string;
-}
-
-export default class ListPage extends Component<ListPageProps, ListPageState> {
-  constructor(props: ListPageProps) {
+export default class ListPage extends Component<
+  RouteComponentProps<ListPageProps>,
+  ListPageState
+> {
+  private shopId: number;
+  private selectedMediaAccountIdForDeleting: number;
+  constructor(props: RouteComponentProps<ListPageProps>) {
     super(props);
-
+    this.shopId = Number(this.props.match.params.shopId);
+    this.selectedMediaAccountIdForDeleting = 0;
     this.state = {
       showLoading: true,
+      showDeleteConfirm: false,
       mediaAccounts: [],
     };
 
-    this.fetchMediaAccountListData = this.fetchMediaAccountListData.bind(this);
-    this.fetchMediaDetailListData = this.fetchMediaDetailListData.bind(this);
     this.handleMediaAccountDeleteButtonClick = this.handleMediaAccountDeleteButtonClick.bind(
       this
     );
+    this.handleDeleteYesButtonClick = this.handleDeleteYesButtonClick.bind(
+      this
+    );
+    this.handleDeleteNoButtonClick = this.handleDeleteNoButtonClick.bind(this);
   }
 
   componentDidMount() {
     Promise.all([
-      this.fetchMediaAccountListData(),
-      this.fetchMediaDetailListData(),
+      fetchMediaAccountListData(this.shopId),
+      fetchMediaListData(this.shopId),
     ])
-      .then(([mediaAccountListData, mediaDetailListData]) => {
+      .then(([mediaAccountListData, mediaListData]) => {
         const loadedMediaAccounts: MediaAccount[] = [];
 
         mediaAccountListData.mediaAccounts.forEach(
@@ -60,10 +66,10 @@ export default class ListPage extends Component<ListPageProps, ListPageState> {
             let mediaName = "";
             let mediaAdminUrl: string | null = "";
 
-            mediaDetailListData.mediaDetails.forEach((mediaDetail) => {
-              if (mediaAccountData.mediaId === mediaDetail.id) {
-                mediaName = mediaDetail.name;
-                mediaAdminUrl = mediaDetail.adminUrl;
+            mediaListData.medias.forEach((mediaData) => {
+              if (mediaAccountData.mediaId === mediaData.mediaId) {
+                mediaName = mediaData.name;
+                mediaAdminUrl = mediaData.adminUrl;
               }
             });
 
@@ -87,47 +93,65 @@ export default class ListPage extends Component<ListPageProps, ListPageState> {
         });
       })
       .catch((error) => {
-        console.log(error);
+        console.log("データーの読み込みに失敗しました。");
       });
   }
 
-  fetchMediaAccountListData(): Promise<MediaAccountListData> {
-    const url = "http://localhost:8082/shops/1/media-accounts";
-    /*const url = "/shops/" + this.props.shopId + "/media-accounts"*/
+  handleDeleteYesButtonClick() {
+    this.setState({
+      showDeleteConfirm: false,
+      showLoading: true,
+    });
 
-    return fetch(url)
+    fetchDeleteMediaAccount(this.shopId, this.selectedMediaAccountIdForDeleting)
       .then((response) => {
-        return response.json() as Promise<MediaAccountListData>;
+        if (response.ok) {
+          const newMediaAccounts: MediaAccount[] = [];
+          this.state.mediaAccounts.forEach((mediaAccount) => {
+            if (mediaAccount.id != this.selectedMediaAccountIdForDeleting) {
+              newMediaAccounts.push(mediaAccount);
+            }
+          });
+          this.setState({
+            mediaAccounts: newMediaAccounts,
+            showLoading: false,
+          });
+        } else {
+          (response.json() as Promise<ApiError>).then((apiError) => {
+            //this.hideLoadingAndrenderErrorMessageBox(apiError.message);
+          });
+        }
       })
       .catch((error) => {
-        throw new Error("データーの読み込みに失敗しました。");
+        //
       });
   }
 
-  fetchMediaDetailListData(): Promise<MediaDetailListData> {
-    const url = "http://localhost:8082/media-details";
-
-    return fetch(url)
-      .then((response) => {
-        return response.json() as Promise<MediaDetailListData>;
-      })
-      .catch((error) => {
-        throw new Error("データーの読み込みに失敗しました。");
-      });
+  handleDeleteNoButtonClick() {
+    this.setState({ showDeleteConfirm: false });
   }
 
   handleMediaAccountDeleteButtonClick(mediaAccountId: number) {
-    console.log(mediaAccountId);
+    this.selectedMediaAccountIdForDeleting = mediaAccountId;
+    this.setState({ showDeleteConfirm: true });
   }
 
   render() {
     return (
       <>
+        <ModalConfirm
+          show={this.state.showDeleteConfirm}
+          message={
+            "アカウントを削除しますか？アカウントを削除するとこのアカウントを使っている全ての自動更新設定が削除されます。"
+          }
+          onYesButtonClick={this.handleDeleteYesButtonClick}
+          onNoButtonClick={this.handleDeleteNoButtonClick}
+        ></ModalConfirm>
         <ModalSpinner show={this.state.showLoading}></ModalSpinner>
         <div className="container-fluid vh-100">
           <div className="row pt-3">
             <div className="col">
-              <TopBar shopId={this.props.shopId}></TopBar>
+              <TopBar shopId={this.shopId}></TopBar>
             </div>
           </div>
           <div className="row pt-3">

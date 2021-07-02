@@ -9,6 +9,11 @@ html * {
   margin-left: 8px;
   top: 1px;
 }
+/*
+.btn-secondary {
+  border-color: #a5a5a5 !important;
+}
+*/
 
 .bg-navy-dark {
   background-color: #1a232d !important;

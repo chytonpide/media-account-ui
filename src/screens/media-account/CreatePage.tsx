@@ -1,29 +1,57 @@
 import * as React from "react";
 import mediasData from "../media/mediasData.json";
-import { MediaAccount } from "./ListPage";
+import ModalSpinner from "../../components/common/ModalSpinner";
+import { MediaAccount } from "./MediaAccount";
 import { RouteComponentProps } from "react-router-dom";
 import { Link } from "react-router-dom";
+import { ApiError } from "../common/ApiError";
 import MediaSelect from "../media/ModalFilterableSelect";
+import MessageBox from "../../components/common/MessageBox";
+//import MediaSelect from "../../components/media/NonStateModalFilterableSelect";
+import { fetchMediaAccountData } from "./MediaAccountDataFetcher";
+import { fetchMediaListData } from "../media/MediaDataFetcher";
 import { Media } from "../media/ModalFilterableSelect";
 
 interface CreatePageProps {
   shopId: string;
 }
 
+interface CreateMediaAccountData {
+  mediaId: number;
+  username: string;
+  password: string;
+  optionalDescriptor: string | null;
+}
+
 interface CreatePageState {
+  showLoading: boolean;
   showMediaSelect: boolean;
+  errorMessage: string | null;
+  errorMessageId: number | null;
   mediaAccount: MediaAccount;
+}
+
+interface CreateMediaAccountData {
+  mediaId: number;
+  username: string;
+  password: string;
+  optionalDescriptor: string | null;
 }
 
 export default class CreatePage extends React.Component<
   RouteComponentProps<CreatePageProps>,
   CreatePageState
 > {
+  private shopId: number;
+
   constructor(props: RouteComponentProps<CreatePageProps>) {
     super(props);
-
+    this.shopId = Number(this.props.match.params.shopId);
     this.state = {
+      showLoading: false,
       showMediaSelect: true,
+      errorMessage: null,
+      errorMessageId: null,
       mediaAccount: {
         id: 0,
         shopId: 0,
@@ -45,13 +73,12 @@ export default class CreatePage extends React.Component<
     this.handleOptionalDescriptorChange = this.handleOptionalDescriptorChange.bind(
       this
     );
-    this.handleChnageSaveButtonClick = this.handleChnageSaveButtonClick.bind(
-      this
-    );
-    this.handleMediaSelectConfirmClick = this.handleMediaSelectConfirmClick.bind(
-      this
-    );
+    this.handleSaveButtonClick = this.handleSaveButtonClick.bind(this);
+    this.handleMediaSelectOkClick = this.handleMediaSelectOkClick.bind(this);
     this.handleMediaSelectCloseClick = this.handleMediaSelectCloseClick.bind(
+      this
+    );
+    this.fetchCreateMediaAccountData = this.fetchCreateMediaAccountData.bind(
       this
     );
   }
@@ -83,7 +110,7 @@ export default class CreatePage extends React.Component<
     });
   }
 
-  handleMediaSelectConfirmClick(media: Media) {
+  handleMediaSelectOkClick(media: Media) {
     this.setState({
       mediaAccount: {
         id: this.state.mediaAccount.id,
@@ -106,36 +133,70 @@ export default class CreatePage extends React.Component<
     });
   }
 
-  handleChnageSaveButtonClick() {
-    console.log("send!");
-  }
+  handleSaveButtonClick() {
+    this.setState({ showLoading: true });
 
-  /*
-  componentDidMount() {
-    let mediaName = "";
+    let optionalDescriptor: string | null = this.state.mediaAccount
+      .optionalDescriptor;
 
-    mediasData.medias.forEach((mediaData) => {
-      if (mediaAccountData.mediaId === mediaData.id) {
-        mediaName = mediaData.name;
-      }
-    });
+    if (optionalDescriptor?.length === 0) {
+      optionalDescriptor = null;
+    }
 
-    const mediaAccount = {
-      id: mediaAccountData.id,
-      mediaId: mediaAccountData.mediaId,
-      shopId: mediaAccountData.shopId,
-      mediaName: mediaName,
-      username: mediaAccountData.username,
-      password: mediaAccountData.password,
-      optionalDescriptor: mediaAccountData.optionalDescriptor,
-      loginValidity: mediaAccountData.loginValidity,
+    const data: CreateMediaAccountData = {
+      mediaId: this.state.mediaAccount.mediaId,
+      username: this.state.mediaAccount.username,
+      password: this.state.mediaAccount.password,
+      optionalDescriptor: optionalDescriptor,
     };
 
-    this.setState({
-      mediaAccount: mediaAccount,
+    this.fetchCreateMediaAccountData(this.shopId, data)
+      .then((response) => {
+        if (response.ok) {
+          this.props.history.push("/shops/" + this.shopId + "/media-accounts");
+        } else {
+          (response.json() as Promise<ApiError>).then((apiError) => {
+            this.hideLoadingAndrenderErrorMessageBox(apiError.message);
+          });
+        }
+      })
+      .catch((error) => {
+        this.hideLoadingAndrenderErrorMessageBox(
+          "データーの保存に失敗しました。"
+        );
+      });
+  }
+
+  fetchCreateMediaAccountData(
+    shopId: number,
+    data: CreateMediaAccountData
+  ): Promise<Response> {
+    const url = "http://localhost:8082/shops/" + shopId + "/media-accounts/";
+
+    return fetch(url, {
+      method: "POST",
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify(data),
     });
   }
-  */
+
+  hideLoadingAndrenderErrorMessageBox(message: string) {
+    this.setState({
+      showLoading: false,
+      errorMessage: message,
+      errorMessageId: Math.round(new Date().getTime() / 1000),
+    });
+  }
+
+  componentDidMount() {
+    fetchMediaListData(this.shopId).then((mediaDetailListData) => {
+      mediaDetailListData.medias.forEach((mediaDetail) => {});
+    });
+  }
 
   public render() {
     const mediaOptions: any = [];
@@ -148,22 +209,27 @@ export default class CreatePage extends React.Component<
       );
     });
 
-    /*
-<div className="row mb-4">
-          <div className="col">
-            <label className="form-label">媒体名</label>
-            <select className="form-select">{mediaOptions}</select>
-          </div>
-        </div>
-    */
-
     return (
       <div className="container-fluid vh-100">
+        <ModalSpinner show={this.state.showLoading}></ModalSpinner>
         <MediaSelect
-          onConfirmButtonClick={this.handleMediaSelectConfirmClick}
+          onSelectOkButtonClick={this.handleMediaSelectOkClick}
           onCloseButtonClick={this.handleMediaSelectCloseClick}
           show={this.state.showMediaSelect}
+          shopId={this.shopId}
         ></MediaSelect>
+        <div className="row mb-2">
+          <div className="col">
+            {this.state.errorMessage != null &&
+              this.state.errorMessageId != null && (
+                <MessageBox
+                  messageId={this.state.errorMessageId}
+                  message={this.state.errorMessage}
+                  color={"danger"}
+                />
+              )}
+          </div>
+        </div>
         <div className="row mb-4">
           <div className="col">
             <div>
@@ -202,7 +268,7 @@ export default class CreatePage extends React.Component<
 
         <div className="row mb-4">
           <div className="col">
-            <label className="form-label">PW</label>
+            <label className="form-label required">PW</label>
             <input
               type="text"
               className="form-control"
@@ -245,7 +311,7 @@ export default class CreatePage extends React.Component<
             <button
               type="button"
               className="btn btn-secondary"
-              onClick={this.handleChnageSaveButtonClick}
+              onClick={this.handleSaveButtonClick}
             >
               保存
             </button>
