@@ -14,7 +14,6 @@ export default class FilteredSelect extends React.Component<
 > {
   public render() {
     const filterText = this.props.filterText;
-
     const options: React.ReactElement[] = [];
 
     this.props.medias.forEach((media, index) => {

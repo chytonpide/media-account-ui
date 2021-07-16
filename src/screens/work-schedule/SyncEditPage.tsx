@@ -1,13 +1,10 @@
 import * as React from "react";
-import mediasData from "../media/mediasData.json";
-import ModalSpinner from "../../components/common/ModalSpinner";
 import { RouteComponentProps } from "react-router-dom";
-import { Link } from "react-router-dom";
-import { ApiError } from "../common/ApiError";
-import MediaSelect from "../media/ModalFilterableSelect";
-import MessageBox from "../../components/common/MessageBox";
-import { fetchMediaListData } from "../media/MediaDataFetcher";
-import { Media } from "../media/ModalFilterableSelect";
+
+import SyncSourceControl from "../../components/work-schedule/SyncSourceControl";
+import SyncTargetControl from "../../components/work-schedule/SyncTargetControl";
+import SyncScheduleControl from "../../components/work-schedule/SyncScheduleControl";
+import { WorkScheduleSyncSchedule } from "../../models/work-schedule/WorkScheduleSyncSchedule";
 
 interface SyncEditPageProps {
   clientId: string;
@@ -24,74 +21,48 @@ export default class SyncEditPage extends React.Component<
     super(props);
     this.clientId = Number(this.props.match.params.clientId);
     this.shopId = Number(this.props.match.params.shopId);
+    this.handleScheduleChange = this.handleScheduleChange.bind(this);
+    this.handleScheduleRemoveClick = this.handleScheduleRemoveClick.bind(this);
+  }
+
+  handleScheduleRemoveClick(scheduleId: number) {
+    console.log(scheduleId);
+  }
+
+  handleScheduleChange(schedule: WorkScheduleSyncSchedule) {
+    console.log(schedule);
   }
 
   public render() {
-    const mediaOptions: any = [];
-
-    mediasData.medias.forEach((mediaData) => {
-      mediaOptions.push(
-        <option key={mediaData.id} value={mediaData.id}>
-          {mediaData.name}
-        </option>
-      );
-    });
-
     return (
       <div className="container-fluid vh-100">
-        <div className="row mb-2">
-          <div className="col">ErrorMessage</div>
-        </div>
-        <div className="row mb-4">
+        <div className="row mb-3 pt-3">
           <div className="col">
-            <div>
-              <label className="form-label required">媒体名</label>
-              <div className="input-group">
-                <input type="text" className="form-control readonly" readOnly />
-                <button type="button" className="btn btn-secondary">
-                  媒体選択
-                </button>
+            <div className="row">
+              <div className="col">
+                <SyncSourceControl />
+              </div>
+            </div>
+            <div className="row mt-3">
+              <div className="col">
+                <SyncTargetControl />
+              </div>
+            </div>
+          </div>
+          <div className="col">
+            <div className="row">
+              <div className="col">
+                <SyncScheduleControl
+                  onEachScheduleDeleteButtonClick={
+                    this.handleScheduleRemoveClick
+                  }
+                  onEachScheduleChange={this.handleScheduleChange}
+                />
               </div>
             </div>
           </div>
         </div>
-
-        <div className="row mb-4">
-          <div className="col">
-            <label className="form-label required">ID</label>
-            <input type="text" className="form-control" id="username"></input>
-          </div>
-        </div>
-
-        <div className="row mb-4">
-          <div className="col">
-            <label className="form-label required">PW</label>
-            <input type="text" className="form-control" id="password"></input>
-          </div>
-        </div>
-
-        <div className="row mb-4">
-          <div className="col">
-            <label className="form-label">Option ID</label>
-            <input
-              type="text"
-              className="form-control"
-              id="optionalDescriptor"
-            ></input>
-          </div>
-        </div>
-        <div className="row pb-4">
-          <div className="col d-grid">
-            <Link
-              to={
-                "/shops/" + this.props.match.params.shopId + "/media-accounts"
-              }
-              type="button"
-              className="btn btn-secondary"
-            >
-              戻る
-            </Link>
-          </div>
+        <div className="row mb-2 mt-3">
           <div className="col d-grid">
             <button type="button" className="btn btn-secondary">
               保存
