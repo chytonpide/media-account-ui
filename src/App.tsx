@@ -7,7 +7,7 @@ import CreatePage from "./screens/media-account/CreatePage";
 import SyncEditPage from "./screens/work-schedule/SyncEditPage";
 function App() {
   return (
-    <div className="text-light bg-dark">
+    <div className="text-light bg-dark ">
       <Router>
         <Switch>
           <Route path="/" exact={true} component={ListPage}></Route>

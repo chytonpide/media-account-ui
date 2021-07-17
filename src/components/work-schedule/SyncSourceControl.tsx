@@ -1,6 +1,10 @@
 import * as React from "react";
+import { SyncSource } from "../../models/work-schedule/WorkScheduleSyncDetail";
 
-export interface SyncSourceInputProps {}
+export interface SyncSourceInputProps {
+  source: SyncSource | null;
+  availableSources: SyncSource[];
+}
 
 export default class SyncSourceInput extends React.Component<
   SyncSourceInputProps
@@ -19,18 +23,18 @@ export default class SyncSourceInput extends React.Component<
             <input
               type="text"
               className="form-control readonly"
-              value={"デリヘルじゃぱん"}
+              value={
+                this.props.source != null ? this.props.source.mediaName : ""
+              }
               readOnly
             />
           </div>
           <div className="input-group mt-2">
-            <span className="input-group-text bg-navy-dark text-white">
-              アカウント
-            </span>
+            <span className="input-group-text bg-navy-dark text-white">ID</span>
             <input
               type="text"
               className="form-control readonly"
-              value={"abcdefg"}
+              value={this.props.source != null ? this.props.source.loginId : ""}
               readOnly
             />
           </div>

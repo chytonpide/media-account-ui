@@ -2,37 +2,32 @@ import * as React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowDown } from "@fortawesome/free-solid-svg-icons";
 import { WorkScheduleSyncSchedule } from "../../models/work-schedule/WorkScheduleSyncSchedule";
+import { SyncSchedule } from "../../models/work-schedule/WorkScheduleSyncDetail";
 import SyncScheduleInput from "./SyncScheduleInput";
 
-export interface SyncSchedulesInputProps {
-  onEachScheduleDeleteButtonClick: (scheduleId: number) => void;
-  onEachScheduleChange: (schedule: WorkScheduleSyncSchedule) => void;
+export interface SyncScheduleControlProps {
+  onEachScheduleDeleteButtonClick: (index: number) => void;
+  onEachScheduleChange: (schedule: SyncSchedule) => void;
+  schedules: SyncSchedule[];
 }
 
-export default class SyncSchedulesInput extends React.Component<
-  SyncSchedulesInputProps
+export default class SyncScheduleControl extends React.Component<
+  SyncScheduleControlProps
 > {
   public render() {
-    const schedules: WorkScheduleSyncSchedule[] = [];
-    schedules.push({
-      id: 1,
-      dayOfWeek: "MONDAY",
-      hour: 1,
-      minute: 1,
-    });
-
     const scheduleInputs: React.ReactElement[] = [];
 
-    schedules.forEach((schedule, index) =>
+    this.props.schedules.forEach((schedule, index) => {
       scheduleInputs.push(
         <SyncScheduleInput
           key={index}
+          index={index}
           schedule={schedule}
           onChange={this.props.onEachScheduleChange}
           onDeleteButtonClick={this.props.onEachScheduleDeleteButtonClick}
         ></SyncScheduleInput>
-      )
-    );
+      );
+    });
 
     return (
       <div className="card bg-transparent border-secondary">

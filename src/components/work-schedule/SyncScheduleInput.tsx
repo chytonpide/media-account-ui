@@ -1,19 +1,17 @@
 import * as React from "react";
-import { WorkScheduleSyncSchedule } from "../../models/work-schedule/WorkScheduleSyncSchedule";
+import { SyncSchedule } from "../../models/work-schedule/WorkScheduleSyncDetail";
 
-export interface ScheduleInputProps {
-  onDeleteButtonClick: (scheduleId: number) => void;
-  onChange: (schedule: WorkScheduleSyncSchedule) => void;
-  schedule: WorkScheduleSyncSchedule;
+export interface SyncScheduleInputProps {
+  onDeleteButtonClick: (scheduleIndex: number) => void;
+  onChange: (schedule: SyncSchedule) => void;
+  schedule: SyncSchedule;
+  index: number;
 }
 
-export interface CronScheduleInputState {}
-
-export default class CronScheduleInput extends React.Component<
-  ScheduleInputProps,
-  CronScheduleInputState
+export default class SyncScheduleInput extends React.Component<
+  SyncScheduleInputProps
 > {
-  constructor(props: ScheduleInputProps) {
+  constructor(props: SyncScheduleInputProps) {
     super(props);
     this.handleDeleteButtonClick = this.handleDeleteButtonClick.bind(this);
     this.handleDayOfWeekChange = this.handleDayOfWeekChange.bind(this);
@@ -24,7 +22,7 @@ export default class CronScheduleInput extends React.Component<
   }
 
   handleDeleteButtonClick() {
-    this.props.onDeleteButtonClick(this.props.schedule.id);
+    this.props.onDeleteButtonClick(this.props.index);
   }
 
   handleDayOfWeekChange(e: React.ChangeEvent<HTMLSelectElement>) {

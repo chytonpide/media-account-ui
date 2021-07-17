@@ -1,5 +1,7 @@
 html * {
   font-family: "Noto Sans JP", sans-serif;
+
+  /*boot-strap .bg-dark*/
 }
 
 .form-label.required:after {

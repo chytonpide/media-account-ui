@@ -1,11 +1,68 @@
 import * as React from "react";
+import {
+  SyncTarget,
+  SyncSource,
+} from "../../models/work-schedule/WorkScheduleSyncDetail";
+import SyncTargetOption from "./SyncTargetOption";
 
-export interface SyncTargetsInputProps {}
+export interface SyncTargetsInputProps {
+  source: SyncSource | null;
+  targets: SyncTarget[];
+  availableTargets: SyncTarget[];
+}
 
 export default class SyncTargetsInput extends React.Component<
   SyncTargetsInputProps
 > {
   public render() {
+    const syncTargetOptions: React.ReactElement[] = [];
+    this.props.availableTargets.forEach((availableTarget) => {
+      let sameAsSource: boolean = false;
+      let selectedTarget: boolean = false;
+
+      if (
+        this.props.source != null &&
+        availableTarget.mediaAccountId == this.props.source.mediaAccountId
+      ) {
+        sameAsSource = true;
+      }
+
+      this.props.targets.forEach((target) => {
+        if (availableTarget.mediaAccountId == target.mediaAccountId) {
+          selectedTarget = true;
+        }
+      });
+
+      if (sameAsSource) {
+        syncTargetOptions.push(
+          <SyncTargetOption
+            target={availableTarget}
+            checked={false}
+            disabled={true}
+            descOfDisabled={"取り込み先は選択できません。"}
+          />
+        );
+      } else if (selectedTarget) {
+        syncTargetOptions.push(
+          <SyncTargetOption
+            target={availableTarget}
+            checked={true}
+            disabled={false}
+            descOfDisabled={null}
+          />
+        );
+      } else {
+        syncTargetOptions.push(
+          <SyncTargetOption
+            target={availableTarget}
+            checked={false}
+            disabled={false}
+            descOfDisabled={null}
+          />
+        );
+      }
+    });
+
     return (
       <div className="card bg-transparent border-secondary">
         <div className="card-header border-secondary">
@@ -18,59 +75,16 @@ export default class SyncTargetsInput extends React.Component<
               type="checkbox"
               value=""
               id="flexCheckChecked"
-              checked
             />
             <label
               className="form-check-label"
-              {...{ for: "flexCheckChecked" }}
+              htmlFor="flexCheckChecked"
+              /*{...{ forHtml: "flexCheckChecked" }}*/
             >
               全て選択
             </label>
           </div>
-          <div className="list-group">
-            <button
-              disabled
-              type="button"
-              className="list-group-item list-group-item-action"
-            >
-              <div className="form-check">
-                <input className="form-check-input" type="checkbox" value="" />
-                <label className="form-check-label">Disabled checkbox</label>
-              </div>
-            </button>
-
-            <button
-              disabled
-              type="button"
-              className="list-group-item list-group-item-action"
-            >
-              <div className="form-check">
-                <input className="form-check-input" type="checkbox" value="" />
-                <label className="form-check-label">
-                  Disabled checkbox &nbsp;&nbsp;
-                  <span className="badge bg-secondary">
-                    取り込み先は選択できません
-                  </span>
-                </label>
-              </div>
-            </button>
-
-            <button
-              disabled
-              type="button"
-              className="list-group-item list-group-item-action"
-            >
-              <div className="form-check">
-                <input
-                  className="form-check-input"
-                  type="checkbox"
-                  value=""
-                  id="flexCheckDisabled"
-                />
-                <label className="form-check-label">Disabled checkbox</label>
-              </div>
-            </button>
-          </div>
+          <div className="list-group">{syncTargetOptions}</div>
         </div>
       </div>
     );
