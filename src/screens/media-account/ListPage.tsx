@@ -6,10 +6,6 @@ import TopBar from "../../components/media-account/TobBar";
 import ModalSpinner from "../../components/common/ModalSpinner";
 import { RouteComponentProps } from "react-router-dom";
 import { ApiError } from "../common/ApiError";
-import { handleApiError } from "../common/HandleApiError";
-import { MediaListData } from "../media/MediaListData";
-import { MediaAccountData } from "./MediaAccountData";
-import { MediaAccountListData } from "./MediaAccountListData";
 import { MediaAccount } from "./MediaAccount";
 import {
   fetchMediaAccountListData,
@@ -108,7 +104,7 @@ export default class ListPage extends Component<
         if (response.ok) {
           const newMediaAccounts: MediaAccount[] = [];
           this.state.mediaAccounts.forEach((mediaAccount) => {
-            if (mediaAccount.id != this.selectedMediaAccountIdForDeleting) {
+            if (mediaAccount.id !== this.selectedMediaAccountIdForDeleting) {
               newMediaAccounts.push(mediaAccount);
             }
           });

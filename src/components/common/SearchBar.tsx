@@ -2,6 +2,7 @@ import * as React from "react";
 
 export interface SearchBarProps {
   filterText: string;
+  placeholder: string;
   onFilterTextChange: (filterText: string) => void;
 }
 
@@ -23,7 +24,7 @@ export default class SearchBar extends React.Component<SearchBarProps> {
         <input
           type="text"
           className="form-control"
-          placeholder="検索"
+          placeholder={this.props.placeholder}
           value={this.props.filterText}
           onChange={this.handleFilterTextChange}
         />

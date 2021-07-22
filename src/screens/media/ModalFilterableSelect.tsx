@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Modal, Button } from "react-bootstrap";
 import FilteredSelect from "../../components/media/FilteredSelect";
-import SearchBar from "../../components/media/SearchBar";
+import SearchBar from "../../components/common/SearchBar";
 import { fetchMediaListData } from "./MediaDataFetcher";
 
 export interface Media {
@@ -175,9 +175,10 @@ export default class ModalFilterableSelect extends React.Component<
         <Modal.Body className="bg-navy-dark text-light">
           <SearchBar
             filterText={this.state.filterText}
+            placeholder={"媒体名又はURLで検索"}
             onFilterTextChange={this.handleFilterTextChange}
           ></SearchBar>
-          <p className="fs-7 lh-1 mb-4">媒体名又はURLで検索</p>
+          <p className="fs-7 lh-1 mt-4">ご利用可能な媒体リスト</p>
           <FilteredSelect
             medias={this.state.medias}
             filterText={this.state.filterText}

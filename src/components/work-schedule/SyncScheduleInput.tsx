@@ -3,7 +3,7 @@ import { SyncSchedule } from "../../models/work-schedule/WorkScheduleSyncDetail"
 
 export interface SyncScheduleInputProps {
   onDeleteButtonClick: (scheduleIndex: number) => void;
-  onChange: (schedule: SyncSchedule) => void;
+  onChange: (schedule: SyncSchedule, index: number) => void;
   schedule: SyncSchedule;
   index: number;
 }
@@ -29,7 +29,7 @@ export default class SyncScheduleInput extends React.Component<
     const newSchedule = this.props.schedule;
     const dayOfWeek = e.target.value;
     newSchedule["dayOfWeek"] = dayOfWeek;
-    this.props.onChange(newSchedule);
+    this.props.onChange(newSchedule, this.props.index);
   }
 
   handleHourChange(e: React.ChangeEvent<HTMLSelectElement>) {
@@ -37,14 +37,14 @@ export default class SyncScheduleInput extends React.Component<
     const hour = Number(e.target.value);
     newSchedule.hour = hour;
     //newSchedule["hour"] = hour;
-    this.props.onChange(newSchedule);
+    this.props.onChange(newSchedule, this.props.index);
   }
 
   handleMinChange(e: React.ChangeEvent<HTMLSelectElement>) {
     const newSchedule = this.props.schedule;
     const minute = Number(e.target.value);
     newSchedule.minute = minute;
-    this.props.onChange(newSchedule);
+    this.props.onChange(newSchedule, this.props.index);
   }
 
   render() {

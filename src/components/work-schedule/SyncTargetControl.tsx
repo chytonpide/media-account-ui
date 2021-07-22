@@ -3,9 +3,11 @@ import {
   SyncTarget,
   SyncSource,
 } from "../../models/work-schedule/WorkScheduleSyncDetail";
-import SyncTargetOption from "./SyncTargetOption";
+import SyncTargetCheckbox from "./SyncTargetCheckbox";
 
 export interface SyncTargetsInputProps {
+  onEachTargetChange: (target: SyncTarget, checked: boolean) => void;
+  onAllTargetsCheckboxCange: (checked: boolean) => void;
   source: SyncSource | null;
   targets: SyncTarget[];
   availableTargets: SyncTarget[];
@@ -14,10 +16,23 @@ export interface SyncTargetsInputProps {
 export default class SyncTargetsInput extends React.Component<
   SyncTargetsInputProps
 > {
+  constructor(props: SyncTargetsInputProps) {
+    super(props);
+    this.handleAllTargetsCheckboxChange = this.handleAllTargetsCheckboxChange.bind(
+      this
+    );
+  }
+
+  handleAllTargetsCheckboxChange(e: React.ChangeEvent<HTMLInputElement>) {
+    this.props.onAllTargetsCheckboxCange(e.currentTarget.checked);
+  }
+
   public render() {
     const syncTargetOptions: React.ReactElement[] = [];
+
     this.props.availableTargets.forEach((availableTarget) => {
       let sameAsSource: boolean = false;
+      let descOfDisabled: string | null = null;
       let selectedTarget: boolean = false;
 
       if (
@@ -25,6 +40,7 @@ export default class SyncTargetsInput extends React.Component<
         availableTarget.mediaAccountId == this.props.source.mediaAccountId
       ) {
         sameAsSource = true;
+        descOfDisabled = "取り込み先は選択できません。";
       }
 
       this.props.targets.forEach((target) => {
@@ -33,35 +49,36 @@ export default class SyncTargetsInput extends React.Component<
         }
       });
 
-      if (sameAsSource) {
-        syncTargetOptions.push(
-          <SyncTargetOption
-            target={availableTarget}
-            checked={false}
-            disabled={true}
-            descOfDisabled={"取り込み先は選択できません。"}
-          />
-        );
-      } else if (selectedTarget) {
-        syncTargetOptions.push(
-          <SyncTargetOption
-            target={availableTarget}
-            checked={true}
-            disabled={false}
-            descOfDisabled={null}
-          />
-        );
-      } else {
-        syncTargetOptions.push(
-          <SyncTargetOption
-            target={availableTarget}
-            checked={false}
-            disabled={false}
-            descOfDisabled={null}
-          />
-        );
-      }
+      syncTargetOptions.push(
+        <SyncTargetCheckbox
+          onChange={this.props.onEachTargetChange}
+          key={availableTarget.mediaAccountId}
+          target={availableTarget}
+          checked={selectedTarget}
+          disabled={sameAsSource}
+          descOfDisabled={descOfDisabled}
+        />
+      );
     });
+
+    let allTargetsChecked: boolean = false;
+
+    if (this.props.source != null) {
+      if (
+        this.props.targets.length ===
+        this.props.availableTargets.length - 1
+      ) {
+        allTargetsChecked = true;
+      } else {
+        allTargetsChecked = false;
+      }
+    } else {
+      if (this.props.targets.length === this.props.availableTargets.length) {
+        allTargetsChecked = true;
+      } else {
+        allTargetsChecked = false;
+      }
+    }
 
     return (
       <div className="card bg-transparent border-secondary">
@@ -74,11 +91,13 @@ export default class SyncTargetsInput extends React.Component<
               className="form-check-input"
               type="checkbox"
               value=""
-              id="flexCheckChecked"
+              id="allTargetsCheckbox"
+              onChange={this.handleAllTargetsCheckboxChange}
+              checked={allTargetsChecked}
             />
             <label
-              className="form-check-label"
-              htmlFor="flexCheckChecked"
+              className="form-check-label cursor-pointer"
+              htmlFor="allTargetsCheckbox"
               /*{...{ forHtml: "flexCheckChecked" }}*/
             >
               全て選択

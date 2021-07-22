@@ -1,0 +1,205 @@
+{
+  "id": 1,
+  "shopId": 1,
+  "source": {
+    "mediaId": 1,
+    "mediaName": "デリヘルじゃぱん",
+    "shopId": 1,
+    "shopName": "shop1",
+    "mediaAccountId": 1,
+    "loginId": "djloginId"
+  },
+  "targets": [
+    {
+      "mediaId": 2,
+      "mediaName": "風俗じゃぱん",
+      "mediaAccountId": 2
+    },
+    {
+      "mediaId": 3,
+      "mediaName": "駅近風俗ランキング",
+      "mediaAccountId": 3
+    }
+  ],
+  "schedules": [
+    {
+      "dayOfWeek": "MONDAY",
+      "hour": 1,
+      "minute": 1
+    },
+    {
+      "dayOfWeek": "SUNDAY",
+      "hour": 2,
+      "minute": 2
+    },
+    {
+      "dayOfWeek": "SUNDAY",
+      "hour": 2,
+      "minute": 2
+    },
+    {
+      "dayOfWeek": "SUNDAY",
+      "hour": 2,
+      "minute": 2
+    },
+    {
+      "dayOfWeek": "SUNDAY",
+      "hour": 2,
+      "minute": 2
+    },
+    {
+      "dayOfWeek": "SUNDAY",
+      "hour": 2,
+      "minute": 2
+    },
+    {
+      "dayOfWeek": "SUNDAY",
+      "hour": 2,
+      "minute": 2
+    },
+    {
+      "dayOfWeek": "SUNDAY",
+      "hour": 2,
+      "minute": 2
+    },
+    {
+      "dayOfWeek": "SUNDAY",
+      "hour": 2,
+      "minute": 2
+    },
+    {
+      "dayOfWeek": "SUNDAY",
+      "hour": 2,
+      "minute": 2
+    },
+    {
+      "dayOfWeek": "SUNDAY",
+      "hour": 2,
+      "minute": 2
+    },
+    {
+      "dayOfWeek": "SUNDAY",
+      "hour": 2,
+      "minute": 2
+    },
+    {
+      "dayOfWeek": "SUNDAY",
+      "hour": 2,
+      "minute": 2
+    },
+    {
+      "dayOfWeek": "SUNDAY",
+      "hour": 2,
+      "minute": 2
+    },
+    {
+      "dayOfWeek": "SUNDAY",
+      "hour": 2,
+      "minute": 2
+    },
+    {
+      "dayOfWeek": "SUNDAY",
+      "hour": 2,
+      "minute": 2
+    },
+    {
+      "dayOfWeek": "SUNDAY",
+      "hour": 2,
+      "minute": 2
+    },
+    {
+      "dayOfWeek": "SUNDAY",
+      "hour": 2,
+      "minute": 2
+    },
+    {
+      "dayOfWeek": "SUNDAY",
+      "hour": 2,
+      "minute": 2
+    },
+    {
+      "dayOfWeek": "SUNDAY",
+      "hour": 2,
+      "minute": 2
+    },
+    {
+      "dayOfWeek": "SUNDAY",
+      "hour": 2,
+      "minute": 2
+    },
+    {
+      "dayOfWeek": "SUNDAY",
+      "hour": 2,
+      "minute": 2
+    },
+    {
+      "dayOfWeek": "SUNDAY",
+      "hour": 2,
+      "minute": 2
+    }
+  ],
+  "availableSources": [
+    {
+      "mediaId": 1,
+      "mediaName": "デリヘルじゃぱん",
+      "shopId": 1,
+      "shopName": "shop1",
+      "mediaAccountId": 1,
+      "loginId": "djloginId"
+    },
+    {
+      "mediaId": 2,
+      "mediaName": "風俗じゃぱん",
+      "shopId": 1,
+      "shopName": "shop1",
+      "mediaAccountId": 2,
+      "loginId": "fjloginId"
+    },
+    {
+      "mediaId": 3,
+      "mediaName": "駅近風俗ランキング",
+      "shopId": 1,
+      "shopName": "shop1",
+      "mediaAccountId": 3,
+      "loginId": "ekiLoginId"
+    },
+    {
+      "mediaId": 1,
+      "mediaName": "デリヘルじゃぱん",
+      "shopId": 2,
+      "shopName": "shop2",
+      "mediaAccountId": 4,
+      "loginId": "shop2djloginId"
+    },
+    {
+      "mediaId": 4,
+      "mediaName": "デリヘルタウン",
+      "shopId": 1,
+      "shopName": "shop1",
+      "mediaAccountId": 5,
+      "loginId": "shop1dtLoginId"
+    }
+  ],
+  "availableTargets": [
+    {
+      "mediaId": 1,
+      "mediaName": "デリヘルじゃぱん",
+      "mediaAccountId": 1
+    },
+    {
+      "mediaId": 2,
+      "mediaName": "風俗じゃぱん",
+      "mediaAccountId": 2
+    },
+    {
+      "mediaId": 3,
+      "mediaName": "駅近風俗ランキング",
+      "mediaAccountId": 3
+    },
+    {
+      "mediaId": 4,
+      "mediaName": "デリヘルタウン",
+      "mediaAccountId": 5
+    }
+  ]
+}

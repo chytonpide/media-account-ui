@@ -6,14 +6,35 @@ import { SyncSchedule } from "../../models/work-schedule/WorkScheduleSyncDetail"
 import SyncScheduleInput from "./SyncScheduleInput";
 
 export interface SyncScheduleControlProps {
+  onScheduleAddButtonClick: () => void;
+  onScheduleSortButtonClick: () => void;
   onEachScheduleDeleteButtonClick: (index: number) => void;
-  onEachScheduleChange: (schedule: SyncSchedule) => void;
+  onEachScheduleChange: (schedule: SyncSchedule, index: number) => void;
   schedules: SyncSchedule[];
 }
 
 export default class SyncScheduleControl extends React.Component<
   SyncScheduleControlProps
 > {
+  constructor(props: SyncScheduleControlProps) {
+    super(props);
+
+    this.handleScheduleAddButtonClick = this.handleScheduleAddButtonClick.bind(
+      this
+    );
+    this.handleScheduleSortButtonClick = this.handleScheduleSortButtonClick.bind(
+      this
+    );
+  }
+
+  handleScheduleAddButtonClick() {
+    this.props.onScheduleAddButtonClick();
+  }
+
+  handleScheduleSortButtonClick() {
+    this.props.onScheduleSortButtonClick();
+  }
+
   public render() {
     const scheduleInputs: React.ReactElement[] = [];
 
@@ -39,20 +60,29 @@ export default class SyncScheduleControl extends React.Component<
             <div className="card-body">
               <div>
                 現在登録されているスケージュール数 :&nbsp;
-                <span className="h4">5</span>&nbsp;件
+                <span className="h4">{this.props.schedules.length}</span>
+                &nbsp;件
               </div>
               <div>
                 <small>※最大21件登録できます。</small>
               </div>
               <div className="d-grid mt-3">
-                <button type="button" className="btn btn-secondary">
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  onClick={this.handleScheduleAddButtonClick}
+                >
                   スケージュールを追加
                 </button>
               </div>
             </div>
           </div>
           <div className="d-md-flex justify-content-md-end mt-3">
-            <button className="btn btn-secondary" type="button">
+            <button
+              className="btn btn-secondary"
+              type="button"
+              onClick={this.handleScheduleSortButtonClick}
+            >
               整列&nbsp;
               <FontAwesomeIcon icon={faArrowDown} />
             </button>
