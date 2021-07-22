@@ -5,13 +5,15 @@ import { Modal, Button } from "react-bootstrap";
 import { SyncSource } from "../../models/work-schedule/WorkScheduleSyncDetail";
 
 interface ModalSyncSourceSelectProps {
+  onSelectOkButtonClick: (source: SyncSource | null) => void;
+  onCloseButtonClick: (event: void) => void;
+  show: boolean;
   source: SyncSource | null;
   availableSources: SyncSource[];
 }
 
 interface ModalSyncSourceSelectState {
   filterText: string;
-  availableSources: SyncSource[];
   selectedMediaAccountId: number | null;
 }
 
@@ -21,20 +23,19 @@ export default class ModalSyncSourceSelect extends React.Component<
 > {
   constructor(props: ModalSyncSourceSelectProps) {
     super(props);
+
     this.state = {
       filterText: "",
-      availableSources: this.props.availableSources,
       selectedMediaAccountId: null,
     };
     this.handleFilterTextChange = this.handleFilterTextChange.bind(this);
     this.handleCloseButtonClick = this.handleCloseButtonClick.bind(this);
     this.handleSelectChange = this.handleSelectChange.bind(this);
+    this.handleSelectOkButtonClick = this.handleSelectOkButtonClick.bind(this);
   }
 
   handleFilterTextChange(filterText: string) {
     const filteredAvailableSources: SyncSource[] = [];
-
-    this.state.availableSources.forEach((availableSource) => {});
 
     this.setState({
       filterText: filterText,
@@ -48,11 +49,30 @@ export default class ModalSyncSourceSelect extends React.Component<
     });
   }
 
-  handleCloseButtonClick() {}
+  handleSelectOkButtonClick() {
+    this.props.availableSources.forEach((availableSource) => {
+      if (
+        availableSource.mediaAccountId === this.state.selectedMediaAccountId
+      ) {
+        this.props.onSelectOkButtonClick(availableSource);
+      }
+      return;
+    });
+
+    this.props.onSelectOkButtonClick(this.props.source);
+  }
+
+  handleCloseButtonClick() {
+    this.props.onCloseButtonClick();
+  }
 
   public render() {
     return (
-      <Modal show={true} onHide={this.handleCloseButtonClick} backdrop="static">
+      <Modal
+        show={this.props.show}
+        onHide={this.handleCloseButtonClick}
+        backdrop="static"
+      >
         <Modal.Header className="bg-navy-dark text-light">
           <Modal.Title>取り込み先選択</Modal.Title>
           <button
@@ -78,7 +98,12 @@ export default class ModalSyncSourceSelect extends React.Component<
             selectedMediaAccountId={this.state.selectedMediaAccountId}
           ></FilteredSelect>
           <div className="d-grid mt-3">
-            <Button variant="secondary">確定</Button>
+            <Button
+              variant="secondary"
+              onClick={this.handleSelectOkButtonClick}
+            >
+              確定
+            </Button>
           </div>
         </Modal.Body>
         <Modal.Footer className="bg-navy-dark text-light"></Modal.Footer>

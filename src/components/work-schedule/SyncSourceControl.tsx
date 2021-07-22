@@ -2,27 +2,58 @@ import * as React from "react";
 import ModalSyncSourceSelect from "./ModalSnycSourceSelect";
 import { SyncSource } from "../../models/work-schedule/WorkScheduleSyncDetail";
 
-export interface SyncSourceInputProps {
+interface SyncSourceControlProps {
+  onSourceChange: (source: SyncSource) => void;
   source: SyncSource | null;
   availableSources: SyncSource[];
 }
 
-export default class SyncSourceInput extends React.Component<
-  SyncSourceInputProps
+interface SyncSourceControlState {
+  showSelect: boolean;
+}
+
+export default class SyncSourceControl extends React.Component<
+  SyncSourceControlProps,
+  SyncSourceControlState
 > {
-  constructor(props: SyncSourceInputProps) {
+  constructor(props: SyncSourceControlProps) {
     super(props);
-    this.handleSourceSelectButtonClick = this.handleSourceSelectButtonClick.bind(
+    this.state = { showSelect: false };
+
+    this.handleSelectOpenButtonClick = this.handleSelectOpenButtonClick.bind(
+      this
+    );
+    this.handleSelectOkButtonClick = this.handleSelectOkButtonClick.bind(this);
+    this.handleSelectCloseButtonClick = this.handleSelectCloseButtonClick.bind(
       this
     );
   }
 
-  handleSourceSelectButtonClick() {}
+  handleSelectOpenButtonClick() {
+    this.setState({ showSelect: true });
+  }
+
+  handleSelectOkButtonClick(source: SyncSource | null) {
+    this.setState({ showSelect: false });
+    if (
+      source !== null &&
+      source.mediaAccountId !== this.props.source?.mediaAccountId
+    ) {
+      this.props.onSourceChange(source);
+    }
+  }
+
+  handleSelectCloseButtonClick() {
+    this.setState({ showSelect: false });
+  }
 
   public render() {
     return (
       <>
         <ModalSyncSourceSelect
+          onSelectOkButtonClick={this.handleSelectOkButtonClick}
+          onCloseButtonClick={this.handleSelectCloseButtonClick}
+          show={this.state.showSelect}
           source={this.props.source}
           availableSources={this.props.availableSources}
         ></ModalSyncSourceSelect>
@@ -61,7 +92,7 @@ export default class SyncSourceInput extends React.Component<
               <button
                 type="button"
                 className="btn btn-secondary"
-                onClick={this.handleSourceSelectButtonClick}
+                onClick={this.handleSelectOpenButtonClick}
               >
                 取り込み先編集
               </button>

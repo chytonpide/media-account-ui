@@ -1,7 +1,6 @@
 import * as React from "react";
 import "./FilteredSelect.css";
 import ButtonStyleOption from "../common/ButtonStyleOption";
-import Option from "./Option";
 import { Media } from "../../screens/media/ModalFilterableSelect";
 
 export interface FilteredSelectProps {

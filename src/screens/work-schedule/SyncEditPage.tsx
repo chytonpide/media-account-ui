@@ -4,6 +4,7 @@ import {
   WorkScheduleSyncDetail,
   SyncSchedule,
   SyncTarget,
+  SyncSource,
   compareSyncSchedule,
 } from "../../models/work-schedule/WorkScheduleSyncDetail";
 import SyncSourceControl from "../../components/work-schedule/SyncSourceControl";
@@ -11,6 +12,8 @@ import SyncTargetControl from "../../components/work-schedule/SyncTargetControl"
 import SyncScheduleControl from "../../components/work-schedule/SyncScheduleControl";
 import TopFixedFloatingButton from "../../components/common/TopFixedFloatingButton";
 import workScheduleSyncDetailStub from "../../models/work-schedule/WorkScheduleSyncDetailStub.json";
+import ModalSpinner from "../../components/common/ModalSpinner";
+import ModalConfirmBox from "../../components/common/ModalConfirmBox";
 
 interface SyncEditPageProps {
   clientId: string;
@@ -19,6 +22,9 @@ interface SyncEditPageProps {
 
 interface SyncEditPageState {
   workScheduleSyncDetail: WorkScheduleSyncDetail;
+  showLoading: boolean;
+  showConfirmBox: boolean;
+  confirmMessage: string;
 }
 
 export default class SyncEditPage extends React.Component<
@@ -47,8 +53,12 @@ export default class SyncEditPage extends React.Component<
     this.handleAllTargetCheckboxChange = this.handleAllTargetCheckboxChange.bind(
       this
     );
-
+    this.handleSourceChange = this.handleSourceChange.bind(this);
+    this.handleConfirmButtonClick = this.handleConfirmButtonClick.bind(this);
     this.state = {
+      showLoading: false,
+      showConfirmBox: false,
+      confirmMessage: "",
       workScheduleSyncDetail: {
         id: 0,
         shopId: 0,
@@ -59,6 +69,20 @@ export default class SyncEditPage extends React.Component<
         availableTargets: [],
       },
     };
+  }
+
+  handleSourceChange(source: SyncSource) {
+    const newWorkScheduleSyncDetail = this.state.workScheduleSyncDetail;
+
+    newWorkScheduleSyncDetail.targets.forEach((target, index) => {
+      if (target.mediaAccountId === source.mediaAccountId) {
+        newWorkScheduleSyncDetail.targets.splice(index, 1);
+      }
+    });
+
+    newWorkScheduleSyncDetail.source = source;
+
+    this.setState({ workScheduleSyncDetail: newWorkScheduleSyncDetail });
   }
 
   handleScheduleDeleteButtonClick(index: number) {
@@ -81,6 +105,16 @@ export default class SyncEditPage extends React.Component<
 
   handleScheduleAddButtonClick() {
     const newWorkScheduleSyncDetail = this.state.workScheduleSyncDetail;
+
+    if (newWorkScheduleSyncDetail.schedules.length >= 21) {
+      this.setState({
+        showConfirmBox: true,
+        confirmMessage: "同期化スケージュールは最大21件まで登録できます",
+      });
+
+      return;
+    }
+
     newWorkScheduleSyncDetail.schedules.splice(0, 0, {
       dayOfWeek: "MONDAY",
       hour: 1,
@@ -141,6 +175,9 @@ export default class SyncEditPage extends React.Component<
       this.setState({ workScheduleSyncDetail: newWorkScheduleSyncDetail });
     }
   }
+  handleConfirmButtonClick() {
+    this.setState({ showConfirmBox: false });
+  }
 
   componentDidMount() {
     this.setState({ workScheduleSyncDetail: workScheduleSyncDetailStub });
@@ -165,6 +202,12 @@ export default class SyncEditPage extends React.Component<
   public render() {
     return (
       <>
+        <ModalConfirmBox
+          show={this.state.showConfirmBox}
+          message={this.state.confirmMessage}
+          onConfrimButtonClick={this.handleConfirmButtonClick}
+        ></ModalConfirmBox>
+        <ModalSpinner show={this.state.showLoading}></ModalSpinner>
         <TopFixedFloatingButton
           onClick={() =>
             this.bottomRef.current?.scrollIntoView({ behavior: "smooth" })
@@ -177,6 +220,7 @@ export default class SyncEditPage extends React.Component<
               <div className="row">
                 <div className="col">
                   <SyncSourceControl
+                    onSourceChange={this.handleSourceChange}
                     source={this.state.workScheduleSyncDetail.source}
                     availableSources={
                       this.state.workScheduleSyncDetail.availableSources

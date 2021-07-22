@@ -12,7 +12,7 @@ import {
   fetchDeleteMediaAccount,
 } from "./MediaAccountDataFetcher";
 import { fetchMediaListData } from "../media/MediaDataFetcher";
-import ModalConfirm from "../../components/common/ModalConfirm";
+import ModalYesNoBox from "../../components/common/ModalYesNoBox";
 
 interface ListPageProps {
   shopId: string;
@@ -135,14 +135,14 @@ export default class ListPage extends Component<
   render() {
     return (
       <>
-        <ModalConfirm
+        <ModalYesNoBox
           show={this.state.showDeleteConfirm}
           message={
             "アカウントを削除しますか？アカウントを削除するとこのアカウントを使っている全ての自動更新設定が削除されます。"
           }
           onYesButtonClick={this.handleDeleteYesButtonClick}
           onNoButtonClick={this.handleDeleteNoButtonClick}
-        ></ModalConfirm>
+        ></ModalYesNoBox>
         <ModalSpinner show={this.state.showLoading}></ModalSpinner>
         <div className="container-fluid vh-100">
           <div className="row pt-3">
