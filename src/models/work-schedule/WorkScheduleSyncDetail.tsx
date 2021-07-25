@@ -6,7 +6,7 @@ export interface WorkScheduleSyncDetail {
   schedules: SyncSchedule[];
   availableSources: SyncSource[];
   availableTargets: SyncTarget[];
-  working: boolean;
+  paused: boolean;
 }
 
 export interface SyncSource {

@@ -15,6 +15,8 @@ import TopFixedFloatingButton from "../../components/common/TopFixedFloatingButt
 import workScheduleSyncDetailStub from "../../models/work-schedule/WorkScheduleSyncDetailStub.json";
 import ModalSpinner from "../../components/common/ModalSpinner";
 import ModalConfirmBox from "../../components/common/ModalConfirmBox";
+import DisablingMask from "../../components/common/DisablingMask";
+import { fetchWorkScheduleSyncDetail } from "../../action/work-schedule/WorkScheduleSyncDetailFetcher";
 
 interface SyncEditPageProps {
   clientId: string;
@@ -26,7 +28,7 @@ interface SyncEditPageState {
   showLoading: boolean;
   disabled: boolean;
   showConfirmBox: boolean;
-  confirmMessage: string;
+  confirmBoxMessage: string;
 }
 
 export default class SyncEditPage extends React.Component<
@@ -59,13 +61,13 @@ export default class SyncEditPage extends React.Component<
     this.handleConfirmButtonClick = this.handleConfirmButtonClick.bind(this);
     this.state = {
       disabled: false,
-      showLoading: false,
+      showLoading: true,
       showConfirmBox: false,
-      confirmMessage: "",
+      confirmBoxMessage: "",
       workScheduleSyncDetail: {
         id: 0,
         shopId: 0,
-        working: false,
+        paused: true,
         source: null,
         targets: [],
         schedules: [],
@@ -113,7 +115,7 @@ export default class SyncEditPage extends React.Component<
     if (newWorkScheduleSyncDetail.schedules.length >= 21) {
       this.setState({
         showConfirmBox: true,
-        confirmMessage: "同期化スケージュールは最大21件まで登録できます",
+        confirmBoxMessage: "同期化スケージュールは最大21件まで登録できます",
       });
 
       return;
@@ -184,22 +186,20 @@ export default class SyncEditPage extends React.Component<
   }
 
   componentDidMount() {
+    /*
     const loadedWorkScheduleDetail: WorkScheduleSyncDetail = workScheduleSyncDetailStub;
 
-    if (loadedWorkScheduleDetail.working === true) {
+    if (loadedWorkScheduleDetail.paused === false) {
       this.setState({
         disabled: true,
-        showConfirmBox: true,
-        confirmMessage: "同期設定は同期化を停止してから修正できます",
         workScheduleSyncDetail: loadedWorkScheduleDetail,
       });
     } else {
       this.setState({
         workScheduleSyncDetail: loadedWorkScheduleDetail,
       });
-    }
+    }*/
 
-    /*
     fetchWorkScheduleSyncDetail(this.shopId).then((data) => {
       const workScheduleSyncDetail: WorkScheduleSyncDetail = {
         id: data.id,
@@ -209,11 +209,22 @@ export default class SyncEditPage extends React.Component<
         schedules: data.schedules,
         availableSources: data.availableSources,
         availableTargets: data.availableTargets,
+        paused: data.paused,
       };
 
-      this.setState({ workScheduleSyncDetail: workScheduleSyncDetail });
+      if (workScheduleSyncDetail.paused === false) {
+        this.setState({
+          disabled: true,
+          showLoading: false,
+          workScheduleSyncDetail: workScheduleSyncDetail,
+        });
+      } else {
+        this.setState({
+          showLoading: false,
+          workScheduleSyncDetail: workScheduleSyncDetail,
+        });
+      }
     });
-    */
   }
 
   public render() {
@@ -224,10 +235,16 @@ export default class SyncEditPage extends React.Component<
       <>
         <ModalConfirmBox
           show={this.state.showConfirmBox}
-          message={this.state.confirmMessage}
+          message={this.state.confirmBoxMessage}
           onConfrimButtonClick={this.handleConfirmButtonClick}
         ></ModalConfirmBox>
         <ModalSpinner show={this.state.showLoading}></ModalSpinner>
+        {this.state.disabled && (
+          <DisablingMask
+            confirmBoxShow={this.state.disabled}
+            confirmBoxMessage={"同期設定は同期化を停止してから修正できます"}
+          ></DisablingMask>
+        )}
         <TopFixedFloatingButton
           onClick={() =>
             this.bottomRef.current?.scrollIntoView({ behavior: "smooth" })
@@ -235,7 +252,7 @@ export default class SyncEditPage extends React.Component<
           descOfButton="下へ"
         ></TopFixedFloatingButton>
         <div className="container-fluid">
-          <div className="row mb-3 pt-3 disabling-mask">
+          <div className="row mb-3 pt-3">
             <div className="col">
               <div className="row">
                 <div className="col">

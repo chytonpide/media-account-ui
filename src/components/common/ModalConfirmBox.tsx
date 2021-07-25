@@ -15,14 +15,14 @@ export default class ModalYesNoBox extends React.Component<
   constructor(props: ModalConfirmBoxProps) {
     super(props);
 
-    this.handleConfrimButtonClick = this.handleConfrimButtonClick.bind(this);
+    this.handleConfirmButtonClick = this.handleConfirmButtonClick.bind(this);
   }
 
   handleCloseButtonClick() {
     this.props.onConfrimButtonClick();
   }
 
-  handleConfrimButtonClick() {
+  handleConfirmButtonClick() {
     this.props.onConfrimButtonClick();
   }
 
@@ -50,7 +50,7 @@ export default class ModalYesNoBox extends React.Component<
                 <button
                   type="button"
                   className="btn btn-secondary"
-                  onClick={this.handleConfrimButtonClick}
+                  onClick={this.handleConfirmButtonClick}
                 >
                   確認
                 </button>
