@@ -5,7 +5,7 @@ import Table from "../../components/media-account/Table";
 import TopBar from "../../components/media-account/TobBar";
 import ModalSpinner from "../../components/common/ModalSpinner";
 import { RouteComponentProps } from "react-router-dom";
-import { ApiError } from "../common/ApiError";
+import { ApiError } from "../../models/common/ApiError";
 import { MediaAccount } from "./MediaAccount";
 import {
   fetchMediaAccountListData,

@@ -1,7 +1,7 @@
 import * as React from "react";
 import ModalSpinner from "../../components/common/ModalSpinner";
 import { MediaAccount } from "./MediaAccount";
-import { ApiError } from "../common/ApiError";
+import { ApiError } from "../../models/common/ApiError";
 import { RouteComponentProps, useHistory } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { MediaAccountData } from "./MediaAccountData";
