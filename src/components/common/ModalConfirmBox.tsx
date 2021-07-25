@@ -1,5 +1,7 @@
 import * as React from "react";
 import { Modal, Button } from "react-bootstrap";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
 
 interface ModalConfirmBoxProps {
   show: boolean;
@@ -33,7 +35,10 @@ export default class ModalYesNoBox extends React.Component<
         keyboard={false}
       >
         <Modal.Header className="bg-navy-dark text-light">
-          <Modal.Title>確認</Modal.Title>
+          <Modal.Title>
+            <FontAwesomeIcon icon={faExclamationCircle} />
+            &nbsp; 確認
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body className="bg-navy-dark text-light">
           <div className="container">

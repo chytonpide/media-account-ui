@@ -7,6 +7,7 @@ import {
   SyncSource,
   compareSyncSchedule,
 } from "../../models/work-schedule/WorkScheduleSyncDetail";
+import "./SyncEditPage.css";
 import SyncSourceControl from "../../components/work-schedule/SyncSourceControl";
 import SyncTargetControl from "../../components/work-schedule/SyncTargetControl";
 import SyncScheduleControl from "../../components/work-schedule/SyncScheduleControl";
@@ -23,6 +24,7 @@ interface SyncEditPageProps {
 interface SyncEditPageState {
   workScheduleSyncDetail: WorkScheduleSyncDetail;
   showLoading: boolean;
+  disabled: boolean;
   showConfirmBox: boolean;
   confirmMessage: string;
 }
@@ -56,12 +58,14 @@ export default class SyncEditPage extends React.Component<
     this.handleSourceChange = this.handleSourceChange.bind(this);
     this.handleConfirmButtonClick = this.handleConfirmButtonClick.bind(this);
     this.state = {
+      disabled: false,
       showLoading: false,
       showConfirmBox: false,
       confirmMessage: "",
       workScheduleSyncDetail: {
         id: 0,
         shopId: 0,
+        working: false,
         source: null,
         targets: [],
         schedules: [],
@@ -180,7 +184,20 @@ export default class SyncEditPage extends React.Component<
   }
 
   componentDidMount() {
-    this.setState({ workScheduleSyncDetail: workScheduleSyncDetailStub });
+    const loadedWorkScheduleDetail: WorkScheduleSyncDetail = workScheduleSyncDetailStub;
+
+    if (loadedWorkScheduleDetail.working === true) {
+      this.setState({
+        disabled: true,
+        showConfirmBox: true,
+        confirmMessage: "同期設定は同期化を停止してから修正できます",
+        workScheduleSyncDetail: loadedWorkScheduleDetail,
+      });
+    } else {
+      this.setState({
+        workScheduleSyncDetail: loadedWorkScheduleDetail,
+      });
+    }
 
     /*
     fetchWorkScheduleSyncDetail(this.shopId).then((data) => {
@@ -200,6 +217,9 @@ export default class SyncEditPage extends React.Component<
   }
 
   public render() {
+    if (this.state.disabled) {
+    }
+
     return (
       <>
         <ModalConfirmBox
@@ -215,7 +235,7 @@ export default class SyncEditPage extends React.Component<
           descOfButton="下へ"
         ></TopFixedFloatingButton>
         <div className="container-fluid">
-          <div className="row mb-3 pt-3">
+          <div className="row mb-3 pt-3 disabling-mask">
             <div className="col">
               <div className="row">
                 <div className="col">

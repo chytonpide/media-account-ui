@@ -4,7 +4,7 @@ import "./App.css";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import EditPage from "./screens/media-account/EditPage";
 import CreatePage from "./screens/media-account/CreatePage";
-import SyncEditPage from "./screens/work-schedule/SyncEditPage";
+import SyncEditPage from "./components/work-schedule/SyncEditPage";
 function App() {
   return (
     <div className="text-light bg-dark ">
