@@ -17,7 +17,6 @@ export default class SyncScheduleInput extends React.Component<
     this.handleDayOfWeekChange = this.handleDayOfWeekChange.bind(this);
     this.handleHourChange = this.handleHourChange.bind(this);
     this.handleMinChange = this.handleMinChange.bind(this);
-
     this.state = {};
   }
 

@@ -43,22 +43,7 @@ export default class SyncEditPage extends React.Component<
     this.bottomRef = React.createRef();
     this.clientId = Number(this.props.match.params.clientId);
     this.shopId = Number(this.props.match.params.shopId);
-    this.handleScheduleChange = this.handleScheduleChange.bind(this);
-    this.handleScheduleDeleteButtonClick = this.handleScheduleDeleteButtonClick.bind(
-      this
-    );
-    this.handleScheduleAddButtonClick = this.handleScheduleAddButtonClick.bind(
-      this
-    );
-    this.handleScheduleSortButtonClick = this.handleScheduleSortButtonClick.bind(
-      this
-    );
-    this.handleTargetChange = this.handleTargetChange.bind(this);
-    this.handleAllTargetCheckboxChange = this.handleAllTargetCheckboxChange.bind(
-      this
-    );
-    this.handleSourceChange = this.handleSourceChange.bind(this);
-    this.handleConfirmButtonClick = this.handleConfirmButtonClick.bind(this);
+
     this.state = {
       disabled: false,
       showLoading: true,
@@ -75,6 +60,26 @@ export default class SyncEditPage extends React.Component<
         availableTargets: [],
       },
     };
+
+    this.handleScheduleChange = this.handleScheduleChange.bind(this);
+    this.handleScheduleDeleteButtonClick = this.handleScheduleDeleteButtonClick.bind(
+      this
+    );
+    this.handleScheduleAddButtonClick = this.handleScheduleAddButtonClick.bind(
+      this
+    );
+    this.handleScheduleSortButtonClick = this.handleScheduleSortButtonClick.bind(
+      this
+    );
+    this.handleTargetChange = this.handleTargetChange.bind(this);
+    this.handleAllTargetCheckboxChange = this.handleAllTargetCheckboxChange.bind(
+      this
+    );
+    this.handleSourceChange = this.handleSourceChange.bind(this);
+    this.handleConfirmButtonClick = this.handleConfirmButtonClick.bind(this);
+    this.handleSaveChangeButtonClick = this.handleSaveChangeButtonClick.bind(
+      this
+    );
   }
 
   handleSourceChange(source: SyncSource) {
@@ -184,6 +189,8 @@ export default class SyncEditPage extends React.Component<
   handleConfirmButtonClick() {
     this.setState({ showConfirmBox: false });
   }
+
+  handleSaveChangeButtonClick() {}
 
   componentDidMount() {
     /*
@@ -301,7 +308,11 @@ export default class SyncEditPage extends React.Component<
           </div>
           <div className="row pb-3 mt-3">
             <div className="col d-grid">
-              <button type="button" className="btn btn-secondary">
+              <button
+                type="button"
+                className="btn btn-secondary"
+                onClick={this.handleSaveChangeButtonClick}
+              >
                 変更を保存
               </button>
             </div>

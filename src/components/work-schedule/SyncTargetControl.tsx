@@ -21,10 +21,39 @@ export default class SyncTargetsInput extends React.Component<
     this.handleAllTargetsCheckboxChange = this.handleAllTargetsCheckboxChange.bind(
       this
     );
+    this.allTargetsChecked = this.allTargetsChecked.bind(this);
   }
 
   handleAllTargetsCheckboxChange(e: React.ChangeEvent<HTMLInputElement>) {
     this.props.onAllTargetsCheckboxCange(e.currentTarget.checked);
+  }
+
+  allTargetsChecked() {
+    let result: boolean = false;
+    let availableTargetsIncludingSource = false;
+
+    this.props.availableTargets.forEach((availableTarget) => {
+      if (
+        availableTarget.mediaAccountId === this.props.source?.mediaAccountId
+      ) {
+        availableTargetsIncludingSource = true;
+      }
+    });
+
+    if (
+      availableTargetsIncludingSource &&
+      this.props.targets.length === this.props.availableTargets.length - 1
+    ) {
+      result = true;
+    }
+
+    if (
+      !availableTargetsIncludingSource &&
+      this.props.targets.length === this.props.availableTargets.length
+    ) {
+      result = true;
+    }
+    return result;
   }
 
   public render() {
@@ -61,25 +90,6 @@ export default class SyncTargetsInput extends React.Component<
       );
     });
 
-    let allTargetsChecked: boolean = false;
-
-    if (this.props.source != null) {
-      if (
-        this.props.targets.length ===
-        this.props.availableTargets.length - 1
-      ) {
-        allTargetsChecked = true;
-      } else {
-        allTargetsChecked = false;
-      }
-    } else {
-      if (this.props.targets.length === this.props.availableTargets.length) {
-        allTargetsChecked = true;
-      } else {
-        allTargetsChecked = false;
-      }
-    }
-
     return (
       <div className="card bg-transparent border-secondary">
         <div className="card-header border-secondary">
@@ -93,7 +103,7 @@ export default class SyncTargetsInput extends React.Component<
               value=""
               id="allTargetsCheckbox"
               onChange={this.handleAllTargetsCheckboxChange}
-              checked={allTargetsChecked}
+              checked={this.allTargetsChecked()}
             />
             <label
               className="form-check-label cursor-pointer"
