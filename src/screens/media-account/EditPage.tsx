@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import { MediaAccountData } from "./MediaAccountData";
 import { MediaData } from "../media/MediaData";
 import MessageBox from "../../components/common/MessageBox";
+import { Message } from "../../components/common/MessageBox";
 import { fetchMediaAccountData } from "./MediaAccountDataFetcher";
 import { fetchMediaData } from "../media/MediaDataFetcher";
 
@@ -17,8 +18,7 @@ interface EditPageProps {
 
 interface EditPageState {
   showLoading: boolean;
-  errorMessage: string | null;
-  errorMessageId: number | null;
+  message: Message | null;
   mediaAccount: MediaAccount;
 }
 
@@ -40,8 +40,7 @@ export default class EditPage extends React.Component<
 
     this.state = {
       showLoading: true,
-      errorMessage: null,
-      errorMessageId: null,
+      message: null,
       mediaAccount: {
         id: 0,
         shopId: 0,
@@ -72,7 +71,7 @@ export default class EditPage extends React.Component<
     this.fetchChangeLoginAccountData = this.fetchChangeLoginAccountData.bind(
       this
     );
-    this.hideLoadingAndrenderErrorMessageBox = this.hideLoadingAndrenderErrorMessageBox.bind(
+    this.hideLoadingAndRenderErrorMessageBox = this.hideLoadingAndRenderErrorMessageBox.bind(
       this
     );
   }
@@ -113,22 +112,27 @@ export default class EditPage extends React.Component<
           this.props.history.push("/shops/" + this.shopId + "/media-accounts");
         } else {
           (response.json() as Promise<ApiError>).then((apiError) => {
-            this.hideLoadingAndrenderErrorMessageBox(apiError.message);
+            this.hideLoadingAndRenderErrorMessageBox(apiError.message);
           });
         }
       })
       .catch((error) => {
-        this.hideLoadingAndrenderErrorMessageBox(
+        this.hideLoadingAndRenderErrorMessageBox(
           "データーの保存に失敗しました。"
         );
       });
   }
 
-  hideLoadingAndrenderErrorMessageBox(message: string) {
+  hideLoadingAndRenderErrorMessageBox(aMessage: string) {
+    const message: Message = {
+      body: aMessage,
+      id: Math.round(new Date().getTime() / 1000),
+      color: "dander",
+    };
+
     this.setState({
       showLoading: false,
-      errorMessage: message,
-      errorMessageId: Math.round(new Date().getTime() / 1000),
+      message: message,
     });
   }
 
@@ -158,7 +162,7 @@ export default class EditPage extends React.Component<
         );
       })
       .catch((error) => {
-        this.hideLoadingAndrenderErrorMessageBox(
+        this.hideLoadingAndRenderErrorMessageBox(
           "データーの読み込みに失敗しました。"
         );
       });
@@ -194,14 +198,9 @@ export default class EditPage extends React.Component<
         <div className="container-fluid vh-100">
           <div className="row mb-2">
             <div className="col">
-              {this.state.errorMessage != null &&
-                this.state.errorMessageId != null && (
-                  <MessageBox
-                    messageId={this.state.errorMessageId}
-                    message={this.state.errorMessage}
-                    color={"danger"}
-                  />
-                )}
+              {this.state.message != null && (
+                <MessageBox message={this.state.message} />
+              )}
             </div>
           </div>
           <div className="row mb-4">

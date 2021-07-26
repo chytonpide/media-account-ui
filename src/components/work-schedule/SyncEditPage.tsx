@@ -1,13 +1,4 @@
 import * as React from "react";
-import { RouteComponentProps } from "react-router-dom";
-import {
-  WorkScheduleSyncDetail,
-  SyncSchedule,
-  SyncTarget,
-  SyncSource,
-  compareSyncSchedule,
-} from "../../models/work-schedule/WorkScheduleSyncDetail";
-import "./SyncEditPage.css";
 import SyncSourceControl from "../../components/work-schedule/SyncSourceControl";
 import SyncTargetControl from "../../components/work-schedule/SyncTargetControl";
 import SyncScheduleControl from "../../components/work-schedule/SyncScheduleControl";
@@ -16,7 +7,22 @@ import workScheduleSyncDetailStub from "../../models/work-schedule/WorkScheduleS
 import ModalSpinner from "../../components/common/ModalSpinner";
 import ModalConfirmBox from "../../components/common/ModalConfirmBox";
 import DisablingMask from "../../components/common/DisablingMask";
-import { fetchWorkScheduleSyncDetail } from "../../action/work-schedule/WorkScheduleSyncDetailFetcher";
+import MessageBox from "../../components/common/MessageBox";
+import { Message } from "../../components/common/MessageBox";
+import { RouteComponentProps } from "react-router-dom";
+import {
+  WorkScheduleSyncDetail,
+  SyncSchedule,
+  SyncTarget,
+  SyncSource,
+  compareSyncSchedule,
+} from "../../models/work-schedule/WorkScheduleSyncDetail";
+import {
+  getWorkScheduleSyncDetail,
+  updateWorkScheduleSyncSpecification,
+} from "../../action/work-schedule/WorkScheduleSyncDetailFetcher";
+import { ApiError } from "../../models/common/ApiError";
+import "./SyncEditPage.css";
 
 interface SyncEditPageProps {
   clientId: string;
@@ -29,6 +35,7 @@ interface SyncEditPageState {
   disabled: boolean;
   showConfirmBox: boolean;
   confirmBoxMessage: string;
+  message: Message | null;
 }
 
 export default class SyncEditPage extends React.Component<
@@ -48,6 +55,7 @@ export default class SyncEditPage extends React.Component<
       disabled: false,
       showLoading: true,
       showConfirmBox: false,
+      message: null,
       confirmBoxMessage: "",
       workScheduleSyncDetail: {
         id: 0,
@@ -78,6 +86,9 @@ export default class SyncEditPage extends React.Component<
     this.handleSourceChange = this.handleSourceChange.bind(this);
     this.handleConfirmButtonClick = this.handleConfirmButtonClick.bind(this);
     this.handleSaveChangeButtonClick = this.handleSaveChangeButtonClick.bind(
+      this
+    );
+    this.hideLoadingAndRenderErrorMessageBox = this.hideLoadingAndRenderErrorMessageBox.bind(
       this
     );
   }
@@ -190,7 +201,38 @@ export default class SyncEditPage extends React.Component<
     this.setState({ showConfirmBox: false });
   }
 
-  handleSaveChangeButtonClick() {}
+  handleSaveChangeButtonClick() {
+    this.setState({ showLoading: true });
+
+    updateWorkScheduleSyncSpecification(this.state.workScheduleSyncDetail)
+      .then((response) => {
+        if (response.ok) {
+          //confirm 닫기 페이지로 이동
+        } else {
+          (response.json() as Promise<ApiError>).then((apiError) => {
+            this.hideLoadingAndRenderErrorMessageBox(apiError.message);
+          });
+        }
+      })
+      .catch((error) => {
+        this.hideLoadingAndRenderErrorMessageBox(
+          "データーの保存に失敗しました。"
+        );
+      });
+  }
+
+  hideLoadingAndRenderErrorMessageBox(aMessage: string) {
+    const message = {
+      body: aMessage,
+      id: Math.round(new Date().getTime() / 1000),
+      color: "danger",
+    };
+
+    this.setState({
+      message: message,
+      showLoading: false,
+    });
+  }
 
   componentDidMount() {
     /*
@@ -207,7 +249,7 @@ export default class SyncEditPage extends React.Component<
       });
     }*/
 
-    fetchWorkScheduleSyncDetail(this.shopId).then((data) => {
+    getWorkScheduleSyncDetail(this.shopId).then((data) => {
       const workScheduleSyncDetail: WorkScheduleSyncDetail = {
         id: data.id,
         shopId: data.shopId,
@@ -259,6 +301,13 @@ export default class SyncEditPage extends React.Component<
           descOfButton="下へ"
         ></TopFixedFloatingButton>
         <div className="container-fluid">
+          {this.state.message != null && (
+            <div className="row pt-3">
+              <div className="col">
+                <MessageBox message={this.state.message} />
+              </div>
+            </div>
+          )}
           <div className="row mb-3 pt-3">
             <div className="col">
               <div className="row">

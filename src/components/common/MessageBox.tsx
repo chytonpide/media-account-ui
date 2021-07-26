@@ -1,9 +1,16 @@
 import * as React from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons";
+import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
+
+export interface Message {
+  body: string;
+  id: number;
+  color: string;
+}
 
 export interface MessageBoxProps {
-  messageId: number;
-  message: string;
-  color: string;
+  message: Message;
 }
 
 export interface MessageBoxState {
@@ -30,7 +37,7 @@ export default class MessageBox extends React.Component<
   }
 
   componentDidUpdate(prevProps: MessageBoxProps) {
-    if (this.props.messageId !== prevProps.messageId) {
+    if (this.props.message.id !== prevProps.message.id) {
       this.thisRef.current?.scrollIntoView();
       this.setState({ isOpen: true });
     }
@@ -42,25 +49,22 @@ export default class MessageBox extends React.Component<
 
   public render() {
     const className =
-      "alert alert-" + this.props.color + " alert-dismissible fade show";
-    /*
-    const messages: string[] = this.props.messages;
+      "alert alert-" +
+      this.props.message.color +
+      " alert-dismissible fade show";
 
-    const dispMessages: React.ReactElement[] = [];
+    let icon: React.ReactElement | null = null;
 
-    messages.map((message, index) => {
-      dispMessages.push(
-        <div key={index} className={className} role="alert">
-          {message}
-        </div>
-      );
-    });
-    */
+    if (this.props.message.color === "danger") {
+      icon = <FontAwesomeIcon icon={faExclamationCircle} />;
+    } else {
+      icon = <FontAwesomeIcon icon={faCheckCircle} />;
+    }
 
     return (
       <div ref={this.thisRef} className="mt-1">
         <div className={className} role="alert">
-          {this.props.message}
+          {icon}&nbsp;{this.props.message.body}
         </div>
       </div>
     );

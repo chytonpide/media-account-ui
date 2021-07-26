@@ -5,7 +5,7 @@ import {
 } from "../../models/work-schedule/WorkScheduleSyncDetail";
 import SyncTargetCheckbox from "./SyncTargetCheckbox";
 
-export interface SyncTargetsInputProps {
+export interface SyncTargetsControlProps {
   onEachTargetChange: (target: SyncTarget, checked: boolean) => void;
   onAllTargetsCheckboxCange: (checked: boolean) => void;
   source: SyncSource | null;
@@ -13,10 +13,10 @@ export interface SyncTargetsInputProps {
   availableTargets: SyncTarget[];
 }
 
-export default class SyncTargetsInput extends React.Component<
-  SyncTargetsInputProps
+export default class SyncTargetsControl extends React.Component<
+  SyncTargetsControlProps
 > {
-  constructor(props: SyncTargetsInputProps) {
+  constructor(props: SyncTargetsControlProps) {
     super(props);
     this.handleAllTargetsCheckboxChange = this.handleAllTargetsCheckboxChange.bind(
       this

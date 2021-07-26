@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import { ApiError } from "../../models/common/ApiError";
 import MediaSelect from "../media/ModalFilterableSelect";
 import MessageBox from "../../components/common/MessageBox";
+import { Message } from "../../components/common/MessageBox";
 //import MediaSelect from "../../components/media/NonStateModalFilterableSelect";
 import { fetchMediaAccountData } from "./MediaAccountDataFetcher";
 import { fetchMediaListData } from "../media/MediaDataFetcher";
@@ -26,8 +27,7 @@ interface CreateMediaAccountData {
 interface CreatePageState {
   showLoading: boolean;
   showMediaSelect: boolean;
-  errorMessage: string | null;
-  errorMessageId: number | null;
+  message: Message | null;
   mediaAccount: MediaAccount;
 }
 
@@ -50,8 +50,7 @@ export default class CreatePage extends React.Component<
     this.state = {
       showLoading: false,
       showMediaSelect: true,
-      errorMessage: null,
-      errorMessageId: null,
+      message: null,
       mediaAccount: {
         id: 0,
         shopId: 0,
@@ -156,12 +155,12 @@ export default class CreatePage extends React.Component<
           this.props.history.push("/shops/" + this.shopId + "/media-accounts");
         } else {
           (response.json() as Promise<ApiError>).then((apiError) => {
-            this.hideLoadingAndrenderErrorMessageBox(apiError.message);
+            this.hideLoadingAndRenderErrorMessageBox(apiError.message);
           });
         }
       })
       .catch((error) => {
-        this.hideLoadingAndrenderErrorMessageBox(
+        this.hideLoadingAndRenderErrorMessageBox(
           "データーの保存に失敗しました。"
         );
       });
@@ -184,11 +183,16 @@ export default class CreatePage extends React.Component<
     });
   }
 
-  hideLoadingAndrenderErrorMessageBox(message: string) {
+  hideLoadingAndRenderErrorMessageBox(aMessage: string) {
+    const message: Message = {
+      body: aMessage,
+      id: Math.round(new Date().getTime() / 1000),
+      color: "dander",
+    };
+
     this.setState({
       showLoading: false,
-      errorMessage: message,
-      errorMessageId: Math.round(new Date().getTime() / 1000),
+      message: message,
     });
   }
 
@@ -220,14 +224,9 @@ export default class CreatePage extends React.Component<
         ></MediaSelect>
         <div className="row mb-2">
           <div className="col">
-            {this.state.errorMessage != null &&
-              this.state.errorMessageId != null && (
-                <MessageBox
-                  messageId={this.state.errorMessageId}
-                  message={this.state.errorMessage}
-                  color={"danger"}
-                />
-              )}
+            {this.state.message != null && (
+              <MessageBox message={this.state.message} />
+            )}
           </div>
         </div>
         <div className="row mb-4">

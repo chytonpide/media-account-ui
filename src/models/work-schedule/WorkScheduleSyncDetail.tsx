@@ -12,7 +12,7 @@ export interface WorkScheduleSyncDetail {
 export interface SyncSource {
   mediaId: number;
   mediaName: string;
-
+  mediaCode: String;
   shopId: number;
   shopName: string;
 
@@ -23,6 +23,7 @@ export interface SyncSource {
 export interface SyncTarget {
   mediaId: number;
   mediaName: String;
+  mediaCode: String;
   mediaAccountId: number;
 }
 

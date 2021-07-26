@@ -9,7 +9,7 @@ interface ModalConfirmBoxProps {
   onConfrimButtonClick: () => void;
 }
 
-export default class ModalYesNoBox extends React.Component<
+export default class ModalConfirmBox extends React.Component<
   ModalConfirmBoxProps
 > {
   constructor(props: ModalConfirmBoxProps) {
