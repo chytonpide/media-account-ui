@@ -5,6 +5,8 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import EditPage from "./screens/media-account/EditPage";
 import CreatePage from "./screens/media-account/CreatePage";
 import SyncEditPage from "./components/work-schedule/SyncEditPage";
+import SyncEditCompletePage from "./components/work-schedule/SyncEditCompletePage";
+
 function App() {
   return (
     <div className="text-light bg-dark ">
@@ -30,6 +32,11 @@ function App() {
             exact
             path="/clients/:clientId/shops/:shopId/work-schedule-sync/edit"
             component={SyncEditPage}
+          />
+          <Route
+            exact
+            path="/clients/:clientId/shops/:shopId/work-schedule-sync/edit-complete"
+            component={SyncEditCompletePage}
           />
         </Switch>
       </Router>

@@ -60,7 +60,7 @@ export default class SyncEditPage extends React.Component<
       workScheduleSyncDetail: {
         id: 0,
         shopId: 0,
-        paused: true,
+        scheduled: true,
         source: null,
         targets: [],
         schedules: [],
@@ -258,10 +258,10 @@ export default class SyncEditPage extends React.Component<
         schedules: data.schedules,
         availableSources: data.availableSources,
         availableTargets: data.availableTargets,
-        paused: data.paused,
+        scheduled: data.scheduled,
       };
 
-      if (workScheduleSyncDetail.paused === false) {
+      if (workScheduleSyncDetail.scheduled === true) {
         this.setState({
           disabled: true,
           showLoading: false,

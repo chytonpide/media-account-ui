@@ -1,13 +1,14 @@
 import { MediaAccountData } from "./MediaAccountData";
 import { MediaAccountListData } from "./MediaAccountListData";
 
-const origin = "http://localhost:8082";
+const apiOrigin = "http://localhost:8082";
 
 export function fetchMediaAccountData(
   shopId: number,
   mediaAccountId: number
 ): Promise<MediaAccountData> {
-  const url = origin + "/shops/" + shopId + "/media-accounts/" + mediaAccountId;
+  const url =
+    apiOrigin + "/shops/" + shopId + "/media-accounts/" + mediaAccountId;
   /*const url = "/shops/" + this.props.shopId + "/media-accounts"*/
 
   return fetch(url).then((response) => {
@@ -18,7 +19,7 @@ export function fetchMediaAccountData(
 export function fetchMediaAccountListData(
   shopId: number
 ): Promise<MediaAccountListData> {
-  const url = origin + "/shops/" + shopId + "/media-accounts";
+  const url = apiOrigin + "/shops/" + shopId + "/media-accounts";
   /*const url = "/shops/" + this.props.shopId + "/media-accounts"*/
 
   return fetch(url).then((response) => {
@@ -30,7 +31,8 @@ export function fetchDeleteMediaAccount(
   shopId: number,
   mediaAccountId: number
 ): Promise<Response> {
-  const url = origin + "/shops/" + shopId + "/media-accounts/" + mediaAccountId;
+  const url =
+    apiOrigin + "/shops/" + shopId + "/media-accounts/" + mediaAccountId;
 
   return fetch(url, {
     method: "DELETE",

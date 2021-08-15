@@ -37,6 +37,7 @@ export default class SyncSourceControl extends React.Component<
     this.setState({ showSelect: false });
     if (
       source !== null &&
+      source !== undefined &&
       source.mediaAccountId !== this.props.source?.mediaAccountId
     ) {
       this.props.onSourceChange(source);

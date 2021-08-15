@@ -6,15 +6,13 @@ export interface WorkScheduleSyncDetail {
   schedules: SyncSchedule[];
   availableSources: SyncSource[];
   availableTargets: SyncTarget[];
-  paused: boolean;
+  scheduled: boolean;
 }
 
 export interface SyncSource {
   mediaId: number;
   mediaName: string;
   mediaCode: String;
-  shopId: number;
-  shopName: string;
 
   mediaAccountId: number;
   loginId: string;

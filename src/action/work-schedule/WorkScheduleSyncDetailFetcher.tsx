@@ -1,11 +1,11 @@
 import { WorkScheduleSyncDetail } from "../../models/work-schedule/WorkScheduleSyncDetail";
 
-const origin = "http://localhost:9095/automan";
+const apiOrigin = "http://localhost:9095/automan";
 
 export function getWorkScheduleSyncDetail(
   shopId: number
 ): Promise<WorkScheduleSyncDetail> {
-  const url = origin + "/shops/" + shopId + "/work-schedule-sync-detail";
+  const url = apiOrigin + "/shops/" + shopId + "/work-schedule-sync-detail";
 
   return fetch(url, { mode: "cors" }).then((response) => {
     return response.json() as Promise<WorkScheduleSyncDetail>;
@@ -16,7 +16,7 @@ export function updateWorkScheduleSyncSpecification(
   workScheduleSyncDetail: WorkScheduleSyncDetail
 ): Promise<Response> {
   const url =
-    origin +
+    apiOrigin +
     "/shops/" +
     workScheduleSyncDetail.shopId +
     "/work-schedule-sync/" +
