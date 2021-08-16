@@ -11,7 +11,13 @@ html * {
   margin-left: 8px;
   top: 1px;
 }
+.full-height {
+  height: 100vh;
+}
 
+.min-full-height {
+  min-height: 100vh;
+}
 .cursor-pointer {
   cursor: pointer;
 }

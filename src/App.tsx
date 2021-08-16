@@ -9,7 +9,7 @@ import SyncEditCompletePage from "./components/work-schedule/SyncEditCompletePag
 
 function App() {
   return (
-    <div className="text-light bg-dark ">
+    <div className="text-light bg-dark min-full-height">
       <Router>
         <Switch>
           <Route path="/" exact={true} component={ListPage}></Route>

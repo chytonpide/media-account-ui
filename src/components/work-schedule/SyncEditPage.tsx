@@ -207,7 +207,13 @@ export default class SyncEditPage extends React.Component<
     updateWorkScheduleSyncSpecification(this.state.workScheduleSyncDetail)
       .then((response) => {
         if (response.ok) {
-          //confirm 닫기 페이지로 이동
+          this.props.history.push(
+            "/clients/" +
+              this.clientId +
+              "/shops/" +
+              this.shopId +
+              "/work-schedule-sync/edit-complete"
+          );
         } else {
           (response.json() as Promise<ApiError>).then((apiError) => {
             this.hideLoadingAndRenderErrorMessageBox(apiError.message);
@@ -300,7 +306,7 @@ export default class SyncEditPage extends React.Component<
           }
           descOfButton="下へ"
         ></TopFixedFloatingButton>
-        <div className="container-fluid">
+        <div className="container-fluid ">
           {this.state.message != null && (
             <div className="row pt-3">
               <div className="col">
