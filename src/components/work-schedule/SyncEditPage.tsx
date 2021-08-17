@@ -207,13 +207,22 @@ export default class SyncEditPage extends React.Component<
     updateWorkScheduleSyncSpecification(this.state.workScheduleSyncDetail)
       .then((response) => {
         if (response.ok) {
+          /*window.location.href를 통해서 서버에 요청해야만, 페이지가 다시 로드되고 WindowControl.js가 주입된다.*/
+          window.location.href =
+            "/clients/" +
+            this.clientId +
+            "/shops/" +
+            this.shopId +
+            "/work-schedule-sync/edit-complete";
+
+          /*
           this.props.history.push(
             "/clients/" +
               this.clientId +
               "/shops/" +
               this.shopId +
               "/work-schedule-sync/edit-complete"
-          );
+          );*/
         } else {
           (response.json() as Promise<ApiError>).then((apiError) => {
             this.hideLoadingAndRenderErrorMessageBox(apiError.message);

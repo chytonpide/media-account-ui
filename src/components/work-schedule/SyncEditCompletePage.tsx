@@ -23,7 +23,7 @@ export default class SyncEditCompletePage extends React.Component<
         <div className="row pb-3 mt-3">
           <div className="col d-grid">
             <button
-              id="close-button"
+              id="window-close-button"
               type="button"
               className="btn btn-secondary"
             >
