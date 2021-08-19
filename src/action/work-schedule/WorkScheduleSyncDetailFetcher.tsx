@@ -1,6 +1,7 @@
 import { WorkScheduleSyncDetail } from "../../models/work-schedule/WorkScheduleSyncDetail";
+import { properties } from "../../properties.js";
 
-const apiOrigin = "http://localhost:9095/automan";
+const apiOrigin = properties.apiOrigin;
 
 export function getWorkScheduleSyncDetail(
   shopId: number

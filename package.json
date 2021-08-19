@@ -31,9 +31,10 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "inject-window-control-interface": "node WindowControlInterfaceInjection.js",
-    "deploy-window-control-interface": "cpx \"WindowControl.js\" C:/Users/kang/eclipse-workspace/automan_ui/src/main/resources/static",
-    "deploy-artifact": "cpx \"build/**\" C:/Users/kang/eclipse-workspace/automan_ui/src/main/resources/static",
-    "deploy": "npm run inject-window-control-interface & npm run deploy-window-control-interface & npm run deploy-artifact"
+    "deploy-window-control-interface": "cpx \"WindowControl.js\" C:/Users/kang/git/automan_ui/src/main/resources/static",
+    "deploy-artifact": "cpx \"build/**\" C:/Users/kang/git/automan_ui/src/main/resources/static",
+    "deploy": "npm run inject-window-control-interface & npm run deploy-window-control-interface & npm run deploy-artifact",
+    "build-deploy": "npm run build & npm run deploy"
   },
   "eslintConfig": {
     "extends": [
