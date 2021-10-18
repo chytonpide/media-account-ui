@@ -1,6 +1,4 @@
 import * as React from "react";
-import { Modal, Button } from "react-bootstrap";
-import { threadId } from "worker_threads";
 import "./ModalSpinner.css";
 
 export interface ModalSpinnerProps {
