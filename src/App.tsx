@@ -1,9 +1,9 @@
-import ListPage from "./screens/media-account/ListPage";
+import ListPage from "./components/media-account/ListPage";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import EditPage from "./screens/media-account/EditPage";
-import CreatePage from "./screens/media-account/CreatePage";
+import EditPage from "./components/media-account/EditPage";
+import CreatePage from "./components/media-account/CreatePage";
 import SyncEditPage from "./components/work-schedule/SyncEditPage";
 import SyncEditCompletePage from "./components/work-schedule/SyncEditCompletePage";
 

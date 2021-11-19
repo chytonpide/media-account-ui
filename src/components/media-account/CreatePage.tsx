@@ -1,17 +1,17 @@
 import * as React from "react";
-import mediasData from "../media/mediasData.json";
-import ModalSpinner from "../../components/common/ModalSpinner";
+import mediasData from "../../components/media/mediasData.json";
+import ModalSpinner from "../common/ModalSpinner";
 import { MediaAccount } from "./MediaAccount";
 import { RouteComponentProps } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { ApiError } from "../../models/common/ApiError";
-import MediaSelect from "../media/ModalFilterableSelect";
-import MessageBox from "../../components/common/MessageBox";
-import { Message } from "../../components/common/MessageBox";
+import MediaSelect from "../../components/media/ModalFilterableSelect";
+import MessageBox from "../common/MessageBox";
+import { Message } from "../common/MessageBox";
 //import MediaSelect from "../../components/media/NonStateModalFilterableSelect";
 import { fetchMediaAccountData } from "./MediaAccountDataFetcher";
-import { fetchMediaListData } from "../media/MediaDataFetcher";
-import { Media } from "../media/ModalFilterableSelect";
+import { fetchMediaListData } from "../../components/media/MediaDataFetcher";
+import { Media } from "../../components/media/ModalFilterableSelect";
 
 interface CreatePageProps {
   shopId: string;

@@ -20,7 +20,7 @@ import {
 import {
   getWorkScheduleSyncDetail,
   updateWorkScheduleSyncSpecification,
-} from "../../action/work-schedule/WorkScheduleSyncDetailFetcher";
+} from "../../action/work-schedule/WorkScheduleSyncAPI";
 import { ApiError } from "../../models/common/ApiError";
 import "./SyncEditPage.css";
 
