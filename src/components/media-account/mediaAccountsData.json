@@ -1,22 +1,22 @@
 {
-  "mediaAccounts": [
-    {
-      "id": 1,
-      "shopId": 1,
-      "mediaId": 1,
-      "username": "user1",
-      "password": "password1",
-      "optionalDescriptor": null,
-      "loginValidity": "VALID"
-    },
-    {
-      "id": 1,
-      "shopId": 1,
-      "mediaId": 2,
-      "username": "user2",
-      "password": "password2",
-      "optionalDescriptor": "optional1",
-      "loginValidity": "NOT_VALID"
-    }
-  ]
+    "mediaAccounts": [
+        {
+            "id": 2,
+            "shopId": 1,
+            "mediaId": 2,
+            "username": "id2",
+            "password": "pw",
+            "optionalDescriptor": "optionId",
+            "loginValidity": "NOT_VALID"
+        },
+        {
+            "id": 4,
+            "shopId": 1,
+            "mediaId": 1,
+            "username": "22650",
+            "password": "89de8af6",
+            "optionalDescriptor": "optionId",
+            "loginValidity": "VALID"
+        }
+    ]
 }

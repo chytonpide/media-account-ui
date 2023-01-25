@@ -1,5 +1,5 @@
 import * as React from "react";
-import { MediaAccount } from "../../screens/media-account/MediaAccount";
+import { MediaAccount } from "../../components/media-account/MediaAccount";
 import { Link } from "react-router-dom";
 
 interface TableRowProps {

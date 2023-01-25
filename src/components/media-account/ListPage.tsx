@@ -1,6 +1,5 @@
 import React, { Component } from "react";
-//import mediasData from "../media/mediasData.json";
-//import mediaAccountsData from "./mediaAccountsData.json";
+
 import Table from "../../components/media-account/Table";
 import TopBar from "../../components/media-account/TobBar";
 import ModalSpinner from "../../components/common/ModalSpinner";
